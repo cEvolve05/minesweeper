@@ -39,3 +39,12 @@
 
 # debug information files
 *.dwo
+
+# clangd cache
+.cache
+
+# CMake
+.build
+
+# CMake Presets but should be local only
+CMakeUserPresets.json

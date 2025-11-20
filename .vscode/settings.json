@@ -1,0 +1,15 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.vs": true
+    },
+    // "clangd.arguments": [
+    //     "--enable-config",
+    //     "--clang-tidy",
+    //     "--compile-commands-dir=.build"
+    // ],
+}
