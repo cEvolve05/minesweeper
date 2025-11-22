@@ -24,7 +24,11 @@ endif (NOT Slint_FOUND)
 file(GLOB_RECURSE CPP_SOURCE CONFIGURE_DEPENDS src/*.cpp src/*.h src/*.hpp)
 
 add_executable(minesweeper ${CPP_SOURCE})
-slint_target_sources(minesweeper ui/main.slint NAMESPACE ui)
+slint_target_sources(minesweeper ui/entry.slint 
+  NAMESPACE ui
+  LIBRARY_PATHS
+    project=${CMAKE_CURRENT_SOURCE_DIR}/ui
+)
 
 target_link_libraries(minesweeper 
   PRIVATE

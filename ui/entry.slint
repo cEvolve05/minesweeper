@@ -1,0 +1,23 @@
+import { VerticalBox, Button, Switch } from "std-widgets.slint";
+import { Empty } from "@project/widget/empty.slint";
+
+// views that need to be controlled from native code
+import { Main } from "@project/view/main.slint";
+export { MainState } from "@project/view/main.slint";
+
+// simple view manager by enum
+export enum ViewName{
+    Main
+}
+
+export global ViewManagerState {
+    in-out property <ViewName> CurrentView: ViewName.Main;
+}
+
+export component Entry inherits Window {
+    preferred-height: 800px;
+    preferred-width: 600px;
+
+    if ViewManagerState.CurrentView == ViewName.Main:
+        Main { }
+}

@@ -7,6 +7,9 @@
         "**/Thumbs.db": true,
         "**/.vs": true
     },
+    "slint.libraryPaths": {
+        "project": "ui",
+    },
     // "clangd.arguments": [
     //     "--enable-config",
     //     "--clang-tidy",

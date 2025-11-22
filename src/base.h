@@ -1,4 +1,4 @@
 #pragma once
-#include "main.h"
+#include "entry.h"
 
-using UiEntry = ui::Main;
+using UiEntry = ui::Entry;
