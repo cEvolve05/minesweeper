@@ -1,5 +1,23 @@
+import { VerticalBox, Button } from "std-widgets.slint";
+export global MainState {
+    in-out property <int> number;
+    callback set(new: int);
+}
+
 export component Main inherits Window {
-    Text {
-        text: "Hello World";
+    VerticalBox {
+        padding: 8px;
+        Text {
+            text: MainState.number;
+            vertical-alignment: TextVerticalAlignment.center;
+            horizontal-alignment: TextHorizontalAlignment.center;
+        }
+
+        Button {
+            text: "increase";
+            clicked => {
+                MainState.set(MainState.number + 1)
+            }
+        }
     }
 }

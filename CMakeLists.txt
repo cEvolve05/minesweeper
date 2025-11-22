@@ -22,10 +22,9 @@ if (NOT Slint_FOUND)
 endif (NOT Slint_FOUND)
 
 file(GLOB_RECURSE CPP_SOURCE CONFIGURE_DEPENDS src/*.cpp src/*.h src/*.hpp)
-file(GLOB_RECURSE SLINT_SOURCE CONFIGURE_DEPENDS ui/*.slint)
 
 add_executable(minesweeper ${CPP_SOURCE})
-slint_target_sources(minesweeper ${SLINT_SOURCE} NAMESPACE ui)
+slint_target_sources(minesweeper ui/main.slint NAMESPACE ui)
 
 target_link_libraries(minesweeper 
   PRIVATE
