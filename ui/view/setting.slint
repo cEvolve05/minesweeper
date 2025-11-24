@@ -1,0 +1,28 @@
+import { VerticalBox, Button } from "std-widgets.slint";
+import { Empty } from "@project/widget/empty.slint";
+import { View } from "@project/widget/view.slint";
+
+export global SettingState {
+    in-out property <int> number;
+    callback set(new: int);
+}
+
+export component Setting inherits View {
+    VerticalBox {
+        padding: 8px;
+        Text {
+            text: "Setting" + SettingState.number;
+            vertical-alignment: TextVerticalAlignment.center;
+            horizontal-alignment: TextHorizontalAlignment.center;
+        }
+
+        Empty {
+            Button {
+                text: "increase";
+                clicked => {
+                    SettingState.set(SettingState.number + 1)
+                }
+            }
+        }
+    }
+}

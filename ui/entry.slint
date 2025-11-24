@@ -1,23 +1,58 @@
-import { VerticalBox, Button, Switch } from "std-widgets.slint";
+import {
+    Button,
+    Switch,
+    Palette,
+    HorizontalBox,
+} from "std-widgets.slint";
 import { Empty } from "@project/widget/empty.slint";
+import { ViewName, ViewManagerState } from "@project/logic/view_manager.slint";
 
 // views that need to be controlled from native code
 import { Main } from "@project/view/main.slint";
 export { MainState } from "@project/view/main.slint";
+import { Game } from "@project/view/game.slint";
+export { GameState } from "@project/view/game.slint";
+import { Scoreboard } from "@project/view/scoreboard.slint";
+export { ScoreboardState } from "@project/view/scoreboard.slint";
+import { Setting } from "@project/view/setting.slint";
+export { SettingState } from "@project/view/setting.slint";
 
-// simple view manager by enum
-export enum ViewName{
-    Main
-}
-
-export global ViewManagerState {
-    in-out property <ViewName> CurrentView: ViewName.Main;
+component Debug {
+    HorizontalBox {
+        for view in [
+            ViewName.Main,
+            ViewName.Game,
+            ViewName.Scoreboard,
+            ViewName.Setting,
+        ]: Button {
+            text: "Dbg";
+            clicked => {
+                ViewManagerState.current-view = view;
+            }
+        }
+    }
 }
 
 export component Entry inherits Window {
     preferred-height: 800px;
     preferred-width: 600px;
 
-    if ViewManagerState.CurrentView == ViewName.Main:
-        Main { }
+    init => {
+        Palette.color-scheme = ColorScheme.light
+    }
+
+    VerticalLayout {
+        Debug {
+            height: 50px;
+        }
+
+        if ViewManagerState.current-view == ViewName.Main:
+            Main { }
+        if ViewManagerState.current-view == ViewName.Game:
+            Game { }
+        if ViewManagerState.current-view == ViewName.Scoreboard:
+            Scoreboard { }
+        if ViewManagerState.current-view == ViewName.Setting:
+            Setting { }
+    }
 }

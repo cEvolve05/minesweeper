@@ -30,6 +30,8 @@ slint_target_sources(minesweeper ui/entry.slint
     project=${CMAKE_CURRENT_SOURCE_DIR}/ui
 )
 
+target_include_directories(minesweeper PRIVATE src)
+
 target_link_libraries(minesweeper 
   PRIVATE
     Slint::Slint

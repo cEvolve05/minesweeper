@@ -1,5 +1,5 @@
 #include "entry.h"
-#include "state_accessor.hpp"
+#include "logic/state_accessor.hpp"
 
 int main(int argc, char** argv) {
     auto ui = ui::Entry::create();

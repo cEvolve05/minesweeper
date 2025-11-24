@@ -1,26 +1,50 @@
-import { VerticalBox, Button } from "std-widgets.slint";
+import { Button } from "std-widgets.slint";
 import { Empty } from "@project/widget/empty.slint";
-import { View } from "../widget/view.slint";
-
-export global MainState {
-    in-out property <int> number;
-    callback set(new: int);
-}
+import { View } from "@project/widget/view.slint";
+import { ViewManagerState, ViewName } from "../logic/view_manager.slint";
+import { Isolator } from "../widget/isolator.slint";
 
 export component Main inherits View {
-    VerticalBox {
-        padding: 8px;
-        Text {
-            text: MainState.number;
-            vertical-alignment: TextVerticalAlignment.center;
-            horizontal-alignment: TextHorizontalAlignment.center;
+    VerticalLayout {
+        Empty {
+            vertical-stretch: 0.5;
+            Isolator {
+                Text {
+                    text: "扫雷";
+                    font-size: 96px;
+                }
+            }
         }
 
         Empty {
-            Button {
-                text: "increase";
-                clicked => {
-                    MainState.set(MainState.number + 1)
+            vertical-stretch: 0.5;
+            // alignment: space-around;
+            Isolator {
+                Empty {
+                    VerticalLayout {
+                        width: 108px;
+                        spacing: 16px;
+                        Button {
+                            text: "开始游戏";
+                            clicked => {
+                                ViewManagerState.current-view = ViewName.Game;
+                            }
+                        }
+
+                        Button {
+                            text: "查看排行榜";
+                            clicked => {
+                                ViewManagerState.current-view = ViewName.Scoreboard;
+                            }
+                        }
+
+                        Button {
+                            text: "设置";
+                            clicked => {
+                                ViewManagerState.current-view = ViewName.Setting;
+                            }
+                        }
+                    }
                 }
             }
         }

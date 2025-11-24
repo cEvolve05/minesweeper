@@ -1,0 +1,13 @@
+import { Empty } from "empty.slint";
+
+export component Isolator {
+    width: 100%;
+    height: 100%;
+    Empty {
+        x: 0;
+        y: 0;
+        width: parent.width;
+        height: parent.height;
+        @children
+    }
+}
