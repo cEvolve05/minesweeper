@@ -17,14 +17,17 @@ export component NumberDisplay {
         y: root.width / 41 * 2;
         spacing: root.width / 41 * 2;
         Digit {
+            width: root.width / 82 * 22;
             number: int(number / 100);
         }
 
         Digit {
+            width: root.width / 82 * 22;
             number: int(number / 10) - int(number / 100) * 10;
         }
 
         Digit {
+            width: root.width / 82 * 22;
             number: number - int(number / 10) * 10;
         }
     }

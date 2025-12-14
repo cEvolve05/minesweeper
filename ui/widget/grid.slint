@@ -20,21 +20,43 @@ export enum GridStatus{
 }
 
 export component Grid {
+    in-out property <GridStatus> status: GridStatus.closed;
+    callback clicked();
+    callback pointer-event(event: PointerEvent);
+    callback hover-changed(value: bool);
+    callback pressed-changed(value: bool);
+    clicked => {
+        debug("clicked")
+    }
+    pointer-event(event) => {
+        debug("toggle-flag ", event)
+    }
+    hover-changed(value) => {
+        debug("hover-changed ", value)
+    }
+    pressed-changed(value) => {
+        debug("pressed-changed ", value)
+    }
     width: 32px;
     height: self.width;
-    in-out property <GridStatus> status: GridStatus.closed;
     Image {
         width: parent.width;
         height: parent.height;
-        source: get-image(status);
+        source: _area.pressed && root.status == GridStatus.closed ? get-image(GridStatus.pressed) : get-image(status);
     }
 
-    TouchArea {
+    _area := TouchArea {
         clicked => {
-            debug(123);
+            clicked();
         }
         pointer-event(event) => {
-            // event.
+            pointer-event(event)
+        }
+        changed has-hover => {
+            hover-changed(self.has-hover)
+        }
+        changed pressed => {
+            pressed-changed(self.pressed)
         }
     }
 

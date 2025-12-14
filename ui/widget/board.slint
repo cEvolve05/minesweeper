@@ -1,6 +1,7 @@
 import { Grid, GridStatus } from "grid.slint";
 import { NumberDisplay } from "number_display.slint";
 import { FaceButton, FaceButtonStatus } from "face_button.slint";
+import { Empty } from "empty.slint";
 
 export struct GridData {
     x: int,
@@ -11,11 +12,8 @@ export struct GridData {
 component BoardGrid {
     in property <[GridData]> grid-data:[{ x:0, y:1, status:GridStatus.closed-flag }];
     in property <length> grid-size;
-    for data in grid-data: Grid {
-        x: data.x * grid-size;
-        y: data.y * grid-size;
-        status: data.status;
-    }
+    callback open(x: int, y: int);
+    callback toggle-flag(x: int, y: int);
 }
 
 component StatusBar inherits Rectangle {
@@ -23,21 +21,26 @@ component StatusBar inherits Rectangle {
     in property <int> number-right;
     in property <FaceButtonStatus> name;
     width: 288px;
-    height: self.width / 288 * 64;
+    // height: self.width / 288 * 64;
+    height: 64px;
     background: #444c54;
     HorizontalLayout {
         alignment: LayoutAlignment.space-between;
-        padding: root.width / 288 * 6;
+        // padding: root.width / 288 * 6;
+        padding: 6px;
         NumberDisplay {
-            width: root.width / 288 * 82;
+            // width: root.width / 288 * 82;
+            width: 82px;
         }
 
         FaceButton {
-            width: root.width / 288 * 52;
+            // width: root.width / 288 * 52;
+            width: 52px;
         }
 
         NumberDisplay {
-            width: root.width / 288 * 82;
+            // width: root.width / 288 * 82;
+            width: 82px;
         }
     }
 }
@@ -174,13 +177,14 @@ export component Board inherits VerticalLayout {
         { x: 7, y: 8, status: GridStatus.closed },
         { x: 8, y: 8, status: GridStatus.closed },
     ];
+    in property <int> grid-width: 9;
+    in property <int> grid-height: 9;
+    in property <length> grid-size: 32px;
     HorizontalLayout {
         spacing: 0;
         CornerUpLeft { }
 
-        BorderHorizontal {
-            width: 288px;
-        }
+        BorderHorizontal { }
 
         CornerUpRight { }
     }
@@ -190,6 +194,7 @@ export component Board inherits VerticalLayout {
         BorderVertical { }
 
         StatusBar {
+            width: grid-width * grid-size;
             number-left: 000;
             number-right: 000;
             name: FaceButtonStatus.smile;
@@ -202,9 +207,7 @@ export component Board inherits VerticalLayout {
         spacing: 0;
         TLeft { }
 
-        BorderHorizontal {
-            width: 288px;
-        }
+        BorderHorizontal { }
 
         TRight { }
     }
@@ -213,11 +216,15 @@ export component Board inherits VerticalLayout {
         spacing: 0;
         BorderVertical { }
 
-        BoardGrid {
-            width: 288px;
-            height: 288px;
-            grid-size: 32px;
-            grid-data: root.grid-data;
+        Empty {
+            width: grid-width * grid-size;
+            height: grid-height * grid-size;
+            for data in root.grid-data: Grid {
+                width: grid-size;
+                x: data.x * grid-size;
+                y: data.y * grid-size;
+                status: data.status;
+            }
         }
 
         BorderVertical { }
@@ -227,9 +234,7 @@ export component Board inherits VerticalLayout {
         spacing: 0;
         CornerBottomLeft { }
 
-        BorderHorizontal {
-            width: 288px;
-        }
+        BorderHorizontal { }
 
         CornerBottomRight { }
     }
