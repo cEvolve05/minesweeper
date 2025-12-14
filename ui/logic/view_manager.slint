@@ -1,10 +1,9 @@
 export enum ViewName{
-    Main,
     Game,
     Scoreboard,
     Setting,
 }
 
 export global ViewManagerState {
-    in-out property <ViewName> current-view: ViewName.Main;
+    in-out property <ViewName> current-view: ViewName.Game;
 }

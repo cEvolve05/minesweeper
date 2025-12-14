@@ -1,0 +1,44 @@
+export component Digit {
+    width: 22px;
+    height: self.width / 11 * 21;
+    in property <int> number: 0;
+    Image {
+        width: parent.width;
+        height: parent.height;
+        source: get-image(number);
+    }
+
+    pure function get-image(number: int) -> image {
+        if number == 0 {
+            return @image-url("../res/ui/number/digit/0.svg");
+        }
+        if number == 1 {
+            return @image-url("../res/ui/number/digit/1.svg");
+        }
+        if number == 2 {
+            return @image-url("../res/ui/number/digit/2.svg");
+        }
+        if number == 3 {
+            return @image-url("../res/ui/number/digit/3.svg");
+        }
+        if number == 4 {
+            return @image-url("../res/ui/number/digit/4.svg");
+        }
+        if number == 5 {
+            return @image-url("../res/ui/number/digit/5.svg");
+        }
+        if number == 6 {
+            return @image-url("../res/ui/number/digit/6.svg");
+        }
+        if number == 7 {
+            return @image-url("../res/ui/number/digit/7.svg");
+        }
+        if number == 8 {
+            return @image-url("../res/ui/number/digit/8.svg");
+        }
+        if number == 9 {
+            return @image-url("../res/ui/number/digit/9.svg");
+        }
+        return @image-url("../res/ui/number/digit/0.svg");
+    }
+}

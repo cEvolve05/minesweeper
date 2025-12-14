@@ -3,9 +3,8 @@
 
 int main(int argc, char** argv) {
     auto ui = ui::Entry::create();
-    StateAccessor<ui::MainState> mainState(ui);
-
-    mainState->on_set([&](int value) { mainState->set_number(value); });
+    // StateAccessor<ui::MainState> mainState(ui);
+    // mainState->on_set([&](int value) { mainState->set_number(value); });
 
     ui->run();
     return 0;

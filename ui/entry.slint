@@ -8,8 +8,6 @@ import { Empty } from "@project/widget/empty.slint";
 import { ViewName, ViewManagerState } from "@project/logic/view_manager.slint";
 
 // views that need to be controlled from native code
-import { Main } from "@project/view/main.slint";
-export { MainState } from "@project/view/main.slint";
 import { Game } from "@project/view/game.slint";
 export { GameState } from "@project/view/game.slint";
 import { Scoreboard } from "@project/view/scoreboard.slint";
@@ -20,7 +18,6 @@ export { SettingState } from "@project/view/setting.slint";
 component Debug {
     HorizontalBox {
         for view in [
-            ViewName.Main,
             ViewName.Game,
             ViewName.Scoreboard,
             ViewName.Setting,
@@ -46,8 +43,6 @@ export component Entry inherits Window {
             height: 50px;
         }
 
-        if ViewManagerState.current-view == ViewName.Main:
-            Main { }
         if ViewManagerState.current-view == ViewName.Game:
             Game { }
         if ViewManagerState.current-view == ViewName.Scoreboard:

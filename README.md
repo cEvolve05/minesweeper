@@ -2,6 +2,8 @@
 
 A simple, classic game in cpp & slint.
 
+image resource come from [minesweeper.online](https://minesweeper.online/)
+
 ## Build
 
 1. prepare [vcpkg](https://vcpkg.io/), [CMake](https://cmake.org/) and a fast internet

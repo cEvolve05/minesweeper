@@ -1,0 +1,36 @@
+import { Digit } from "digit.slint";
+
+export component NumberDisplay {
+    in property <int> number;
+    width: 82px;
+    height: self.width / 41 * 25;
+    Image {
+        x: 0;
+        y: 0;
+        width: parent.width;
+        height: parent.height;
+        source: @image-url("../res/ui/number/background.svg");
+    }
+
+    HorizontalLayout {
+        x: root.width / 41 * 2;
+        y: root.width / 41 * 2;
+        spacing: root.width / 41 * 2;
+        Digit {
+            number: int(number / 100);
+        }
+
+        Digit {
+            number: int(number / 10) - int(number / 100) * 10;
+        }
+
+        Digit {
+            number: number - int(number / 10) * 10;
+        }
+    }
+
+    function int(number: float) -> int {
+        let res: int = number;
+        return res;
+    }
+}

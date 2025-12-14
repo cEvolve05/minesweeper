@@ -1,0 +1,92 @@
+export enum GridStatus{
+    closed,
+    closed-flag,
+
+    opened,
+    opened_mine,
+    opened_mine_red,
+    opened_mine_wrong,
+
+    pressed,
+
+    number1,
+    number2,
+    number3,
+    number4,
+    number5,
+    number6,
+    number7,
+    number8,
+}
+
+export component Grid {
+    width: 32px;
+    height: self.width;
+    in-out property <GridStatus> status: GridStatus.closed;
+    Image {
+        width: parent.width;
+        height: parent.height;
+        source: get-image(status);
+    }
+
+    TouchArea {
+        clicked => {
+            debug(123);
+        }
+        pointer-event(event) => {
+            // event.
+        }
+    }
+
+    pure function get-image(status: GridStatus) -> image {
+        // closed
+        if status == GridStatus.closed {
+            return @image-url("../res/ui/grid/closed.svg");
+        }
+        if status == GridStatus.closed_flag {
+            return @image-url("../res/ui/grid/closed_flag.svg");
+        }
+        //opened
+        if status == GridStatus.opened {
+            return @image-url("../res/ui/grid/opened.svg");
+        }
+        if status == GridStatus.opened_mine {
+            return @image-url("../res/ui/grid/opened_mine.svg");
+        }
+        if status == GridStatus.opened_mine_red {
+            return @image-url("../res/ui/grid/opened_mine_red.svg");
+        }
+        if status == GridStatus.opened_mine_wrong {
+            return @image-url("../res/ui/grid/opened_mine_wrong.svg");
+        }
+        if status == GridStatus.pressed {
+            return @image-url("../res/ui/grid/pressed.svg");
+        }
+        // numbers
+        if status == GridStatus.number1 {
+            return @image-url("../res/ui/grid/number/1.svg");
+        }
+        if status == GridStatus.number2 {
+            return @image-url("../res/ui/grid/number/2.svg");
+        }
+        if status == GridStatus.number3 {
+            return @image-url("../res/ui/grid/number/3.svg");
+        }
+        if status == GridStatus.number4 {
+            return @image-url("../res/ui/grid/number/4.svg");
+        }
+        if status == GridStatus.number5 {
+            return @image-url("../res/ui/grid/number/5.svg");
+        }
+        if status == GridStatus.number6 {
+            return @image-url("../res/ui/grid/number/6.svg");
+        }
+        if status == GridStatus.number7 {
+            return @image-url("../res/ui/grid/number/7.svg");
+        }
+        if status == GridStatus.number8 {
+            return @image-url("../res/ui/grid/number/8.svg");
+        }
+        return @image-url("../res/ui/grid/closed.svg");
+    }
+}

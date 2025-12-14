@@ -1,0 +1,29 @@
+export enum FaceButtonStatus{
+    smile,
+    pressed,
+    lose,
+}
+
+export component FaceButton {
+    width: 52px;
+    height: self.width;
+    in-out property <FaceButtonStatus> status: FaceButtonStatus.smile;
+    Image {
+        width: parent.width;
+        height: parent.height;
+        source: get-image(status);
+    }
+
+    pure function get-image(status: FaceButtonStatus) -> image {
+        if status == FaceButtonStatus.smile {
+            return @image-url("../res/ui/face_smile.svg");
+        }
+        if status == FaceButtonStatus.pressed {
+            return @image-url("../res/ui/face_pressed.svg");
+        }
+        if status == FaceButtonStatus.lose {
+            return @image-url("../res/ui/face_lose.svg");
+        }
+        return @image-url("../res/ui/face_smile.svg");
+    }
+}

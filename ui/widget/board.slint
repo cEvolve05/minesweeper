@@ -1,0 +1,236 @@
+import { Grid, GridStatus } from "grid.slint";
+import { NumberDisplay } from "number_display.slint";
+import { FaceButton, FaceButtonStatus } from "face_button.slint";
+
+export struct GridData {
+    x: int,
+    y: int,
+    status: GridStatus,
+}
+
+component BoardGrid {
+    in property <[GridData]> grid-data:[{ x:0, y:1, status:GridStatus.closed-flag }];
+    in property <length> grid-size;
+    for data in grid-data: Grid {
+        x: data.x * grid-size;
+        y: data.y * grid-size;
+        status: data.status;
+    }
+}
+
+component StatusBar inherits Rectangle {
+    in property <int> number-left;
+    in property <int> number-right;
+    in property <FaceButtonStatus> name;
+    width: 288px;
+    height: self.width / 288 * 64;
+    background: #444c54;
+    HorizontalLayout {
+        alignment: LayoutAlignment.space-between;
+        padding: root.width / 288 * 6;
+        NumberDisplay {
+            width: root.width / 288 * 82;
+        }
+
+        FaceButton {
+            width: root.width / 288 * 52;
+        }
+
+        NumberDisplay {
+            width: root.width / 288 * 82;
+        }
+    }
+}
+
+component BorderHorizontal inherits Image {
+    height: 22px;
+    horizontal-tiling: repeat;
+    source: @image-url("../res/ui/border/border_hor_2x.png");
+}
+
+component BorderVertical inherits Image {
+    width: 24px;
+    vertical-tiling: repeat;
+    source: @image-url("../res/ui/border/border_vert_2x.png");
+}
+
+component CornerBottomLeft inherits Image {
+    width: 24px;
+    height: self.width / 24 * 22;
+    source: @image-url("../res/ui/border/corner_bottom_left_2x.png");
+}
+
+component CornerBottomRight inherits Image {
+    width: 24px;
+    height: self.width / 24 * 22;
+    source: @image-url("../res/ui/border/corner_bottom_right_2x.png");
+}
+
+component CornerUpLeft inherits Image {
+    width: 24px;
+    height: self.width / 24 * 22;
+    source: @image-url("../res/ui/border/corner_up_left_2x.png");
+}
+
+component CornerUpRight inherits Image {
+    width: 24px;
+    height: self.width / 24 * 22;
+    source: @image-url("../res/ui/border/corner_up_right_2x.png");
+}
+
+component TLeft inherits Image {
+    width: 24px;
+    height: self.width / 24 * 22;
+    source: @image-url("../res/ui/border/t_left_2x.png");
+}
+
+component TRight inherits Image {
+    width: 24px;
+    height: self.width / 24 * 22;
+    source: @image-url("../res/ui/border/t_right_2x.png");
+}
+
+export component Board inherits VerticalLayout {
+    in property <[GridData]> grid-data: [
+        { x: 1, y: 0, status: GridStatus.number1 },
+        { x: 7, y: 0, status: GridStatus.number1 },
+        { x: 1, y: 1, status: GridStatus.number1 },
+        { x: 7, y: 1, status: GridStatus.number2 },
+        { x: 1, y: 2, status: GridStatus.number2 },
+        { x: 2, y: 2, status: GridStatus.number1 },
+        { x: 7, y: 2, status: GridStatus.number1 },
+        { x: 3, y: 3, status: GridStatus.number2 },
+        { x: 6, y: 3, status: GridStatus.number1 },
+        { x: 7, y: 3, status: GridStatus.number2 },
+        { x: 8, y: 3, status: GridStatus.closed-flag },
+        { x: 3, y: 4, status: GridStatus.number3 },
+        { x: 6, y: 4, status: GridStatus.number1 },
+        { x: 7, y: 4, status: GridStatus.closed-flag },
+        { x: 3, y: 5, status: GridStatus.number2 },
+        { x: 5, y: 5, status: GridStatus.number1 },
+        { x: 6, y: 5, status: GridStatus.number2 },
+        { x: 7, y: 5, status: GridStatus.number2 },
+        { x: 0, y: 6, status: GridStatus.number1 },
+        { x: 1, y: 6, status: GridStatus.number1 },
+        { x: 2, y: 6, status: GridStatus.number1 },
+        { x: 3, y: 6, status: GridStatus.number1 },
+        { x: 5, y: 6, status: GridStatus.number2 },
+        { x: 7, y: 6, status: GridStatus.number1 },
+        { x: 8, y: 6, status: GridStatus.closed-flag },
+        { x: 5, y: 7, status: GridStatus.number3 },
+        { x: 5, y: 8, status: GridStatus.number2 },
+        { x: 0, y: 0, status: GridStatus.closed },
+        { x: 2, y: 0, status: GridStatus.closed },
+        { x: 3, y: 0, status: GridStatus.closed },
+        { x: 4, y: 0, status: GridStatus.closed },
+        { x: 5, y: 0, status: GridStatus.closed },
+        { x: 6, y: 0, status: GridStatus.closed },
+        { x: 8, y: 0, status: GridStatus.closed },
+        { x: 0, y: 1, status: GridStatus.closed },
+        { x: 2, y: 1, status: GridStatus.closed },
+        { x: 3, y: 1, status: GridStatus.closed },
+        { x: 4, y: 1, status: GridStatus.closed },
+        { x: 5, y: 1, status: GridStatus.closed },
+        { x: 6, y: 1, status: GridStatus.closed },
+        { x: 8, y: 1, status: GridStatus.closed },
+        { x: 0, y: 2, status: GridStatus.closed },
+        { x: 3, y: 2, status: GridStatus.closed },
+        { x: 4, y: 2, status: GridStatus.closed },
+        { x: 5, y: 2, status: GridStatus.closed },
+        { x: 6, y: 2, status: GridStatus.closed },
+        { x: 8, y: 2, status: GridStatus.closed },
+        { x: 0, y: 3, status: GridStatus.closed },
+        { x: 1, y: 3, status: GridStatus.closed },
+        { x: 2, y: 3, status: GridStatus.closed },
+        { x: 4, y: 3, status: GridStatus.closed },
+        { x: 5, y: 3, status: GridStatus.closed },
+        { x: 0, y: 4, status: GridStatus.closed },
+        { x: 1, y: 4, status: GridStatus.closed },
+        { x: 2, y: 4, status: GridStatus.closed },
+        { x: 4, y: 4, status: GridStatus.closed },
+        { x: 5, y: 4, status: GridStatus.closed },
+        { x: 8, y: 4, status: GridStatus.closed },
+        { x: 0, y: 5, status: GridStatus.closed },
+        { x: 1, y: 5, status: GridStatus.closed },
+        { x: 2, y: 5, status: GridStatus.closed },
+        { x: 4, y: 5, status: GridStatus.closed },
+        { x: 8, y: 5, status: GridStatus.closed },
+        { x: 4, y: 6, status: GridStatus.closed },
+        { x: 6, y: 6, status: GridStatus.closed },
+        { x: 0, y: 7, status: GridStatus.closed },
+        { x: 1, y: 7, status: GridStatus.closed },
+        { x: 2, y: 7, status: GridStatus.closed },
+        { x: 3, y: 7, status: GridStatus.closed },
+        { x: 4, y: 7, status: GridStatus.closed },
+        { x: 6, y: 7, status: GridStatus.closed },
+        { x: 7, y: 7, status: GridStatus.closed },
+        { x: 8, y: 7, status: GridStatus.closed },
+        { x: 0, y: 8, status: GridStatus.closed },
+        { x: 1, y: 8, status: GridStatus.closed },
+        { x: 2, y: 8, status: GridStatus.closed },
+        { x: 3, y: 8, status: GridStatus.closed },
+        { x: 4, y: 8, status: GridStatus.closed },
+        { x: 6, y: 8, status: GridStatus.closed },
+        { x: 7, y: 8, status: GridStatus.closed },
+        { x: 8, y: 8, status: GridStatus.closed },
+    ];
+    HorizontalLayout {
+        spacing: 0;
+        CornerUpLeft { }
+
+        BorderHorizontal {
+            width: 288px;
+        }
+
+        CornerUpRight { }
+    }
+
+    HorizontalLayout {
+        spacing: 0;
+        BorderVertical { }
+
+        StatusBar {
+            number-left: 000;
+            number-right: 000;
+            name: FaceButtonStatus.smile;
+        }
+
+        BorderVertical { }
+    }
+
+    HorizontalLayout {
+        spacing: 0;
+        TLeft { }
+
+        BorderHorizontal {
+            width: 288px;
+        }
+
+        TRight { }
+    }
+
+    HorizontalLayout {
+        spacing: 0;
+        BorderVertical { }
+
+        BoardGrid {
+            width: 288px;
+            height: 288px;
+            grid-size: 32px;
+            grid-data: root.grid-data;
+        }
+
+        BorderVertical { }
+    }
+
+    HorizontalLayout {
+        spacing: 0;
+        CornerBottomLeft { }
+
+        BorderHorizontal {
+            width: 288px;
+        }
+
+        CornerBottomRight { }
+    }
+}
