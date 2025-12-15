@@ -3,7 +3,7 @@ import { NumberDisplay } from "number_display.slint";
 import { FaceButton, FaceButtonStatus } from "face_button.slint";
 import { Empty } from "empty.slint";
 
-export { GridStatus }
+export { GridStatus, FaceButtonStatus }
 
 export struct GridData {
     x: int,
@@ -21,30 +21,8 @@ component BoardGrid {
 component StatusBar inherits Rectangle {
     in property <int> number-left;
     in property <int> number-right;
-    in property <FaceButtonStatus> name;
-    width: 288px;
-    // height: self.width / 288 * 64;
-    height: 64px;
-    background: #444c54;
-    HorizontalLayout {
-        alignment: LayoutAlignment.space-between;
-        // padding: root.width / 288 * 6;
-        padding: 6px;
-        NumberDisplay {
-            // width: root.width / 288 * 82;
-            width: 82px;
-        }
-
-        FaceButton {
-            // width: root.width / 288 * 52;
-            width: 52px;
-        }
-
-        NumberDisplay {
-            // width: root.width / 288 * 82;
-            width: 82px;
-        }
-    }
+    in property <FaceButtonStatus> status;
+    callback clicked();
 }
 
 component BorderHorizontal inherits Image {
@@ -96,7 +74,7 @@ component TRight inherits Image {
 }
 
 export component Board {
-    in property <[GridData]> grid-data;
+    in-out property <[GridData]> grid-data;
     in property <int> grid-width: 9;
     in property <int> grid-height: 9;
     in property <length> grid-size: 32px;
@@ -104,6 +82,10 @@ export component Board {
     callback pointer-event(x: int, y: int, event: PointerEvent);
     callback hover-changed(x: int, y: int, value: bool);
     callback pressed-changed(x: int, y: int, value: bool);
+    in property <int> flag-counter;
+    in property <int> time-in-second;
+    in property <FaceButtonStatus> face-status;
+    callback face_clicked();
     VerticalLayout {
         HorizontalLayout {
             spacing: 0;
@@ -118,11 +100,29 @@ export component Board {
             spacing: 0;
             BorderVertical { }
 
-            StatusBar {
+            Rectangle {
                 width: grid-width * grid-size;
-                number-left: 000;
-                number-right: 000;
-                name: FaceButtonStatus.smile;
+                height: 64px;
+                background: #444c54;
+                HorizontalLayout {
+                    alignment: LayoutAlignment.space-between;
+                    padding: 6px;
+                    NumberDisplay {
+                        number: root.flag-counter;
+                        width: 82px;
+                    }
+
+                    FaceButton {
+                        width: 52px;
+                        status: root.face-status;
+                        clicked => root.face_clicked();
+                    }
+
+                    NumberDisplay {
+                        number: root.time-in-second;
+                        width: 82px;
+                    }
+                }
             }
 
             BorderVertical { }

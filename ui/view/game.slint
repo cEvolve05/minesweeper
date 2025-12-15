@@ -1,7 +1,12 @@
 import { VerticalBox, Button } from "std-widgets.slint";
 import { Isolator } from "@project/widget/isolator.slint";
 import { View } from "@project/widget/view.slint";
-import { Board, GridData, GridStatus } from "../widget/board.slint";
+import {
+    Board,
+    GridData,
+    GridStatus,
+    FaceButtonStatus,
+} from "../widget/board.slint";
 
 export global GameState {
     in-out property <int> number;
@@ -9,11 +14,15 @@ export global GameState {
     in property <int> grid-width: 9;
     in property <int> grid-height: 9;
     in property <length> grid-size: 32px;
-    in property <[GridData]> grid-data;
+    in-out property <[GridData]> grid-data;
     callback clicked(x: int, y: int);
     callback pointer-event(x: int, y: int, event: PointerEvent);
     callback hover-changed(x: int, y: int, value: bool);
     callback pressed-changed(x: int, y: int, value: bool);
+    in property <int> flag-counter;
+    in property <int> time-in-second;
+    in property <FaceButtonStatus> face-status;
+    callback face_clicked();
 }
 
 export component Game inherits View {
@@ -23,6 +32,9 @@ export component Game inherits View {
             grid-height <=> GameState.grid-height;
             grid-size <=> GameState.grid-size;
             grid-data <=> GameState.grid-data;
+            flag-counter: GameState.flag-counter;
+            time-in-second: GameState.time-in-second;
+            face-status: GameState.face-status;
             clicked(x, y) => {
                 GameState.clicked(x, y)
             }
@@ -35,6 +47,7 @@ export component Game inherits View {
             pressed-changed(x, y, value) => {
                 GameState.pressed-changed(x, y, value)
             }
+            face_clicked => GameState.face_clicked();
         }
     }
 }

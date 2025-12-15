@@ -3,6 +3,7 @@
 
 template <typename SlintWidgetState>
 class StateAccessor {
+  protected:
     slint::ComponentHandle<UiEntry> uiEntry;
 
   public:

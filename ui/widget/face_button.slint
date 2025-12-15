@@ -8,10 +8,15 @@ export component FaceButton {
     width: 52px;
     height: self.width;
     in-out property <FaceButtonStatus> status: FaceButtonStatus.smile;
+    callback clicked();
     Image {
         width: parent.width;
         height: parent.height;
-        source: get-image(status);
+        source: _area.pressed ? get-image(FaceButtonStatus.pressed) : get-image(status);
+    }
+
+    _area := TouchArea {
+        clicked => root.clicked();
     }
 
     pure function get-image(status: FaceButtonStatus) -> image {
