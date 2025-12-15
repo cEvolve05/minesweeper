@@ -1,28 +1,32 @@
-import { VerticalBox, Button } from "std-widgets.slint";
+import { Button } from "std-widgets.slint";
 import { Empty } from "@project/widget/empty.slint";
 import { View } from "@project/widget/view.slint";
 
+export struct ScoreboardItem {
+    name: string,
+    time: string,
+    difficulty: string,
+}
+
 export global ScoreboardState {
-    in-out property <int> number;
-    callback set(new: int);
+    in property <[ScoreboardItem]> items;
+    property <length> name-size;
+    property <length> time-size;
+    property <length> difficulty-size;
+}
+
+component ScoreboardTitle {
+    Text {
+        text: "Scoreboard";
+        vertical-alignment: TextVerticalAlignment.center;
+        horizontal-alignment: TextHorizontalAlignment.center;
+    }
 }
 
 export component Scoreboard inherits View {
-    VerticalBox {
+    VerticalLayout {
         padding: 8px;
-        Text {
-            text: "Scoreboard" + ScoreboardState.number;
-            vertical-alignment: TextVerticalAlignment.center;
-            horizontal-alignment: TextHorizontalAlignment.center;
-        }
-
-        Empty {
-            Button {
-                text: "increase";
-                clicked => {
-                    ScoreboardState.set(ScoreboardState.number + 1)
-                }
-            }
-        }
+        alignment: LayoutAlignment.start;
+        for item in ScoreboardState.items: Rectangle { }
     }
 }

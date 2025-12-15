@@ -93,7 +93,7 @@ component TRight inherits Image {
     source: @image-url("../res/ui/border/t_right_2x.png");
 }
 
-export component Board inherits VerticalLayout {
+export component Board {
     in property <[GridData]> grid-data: [
         { x: 1, y: 0, status: GridStatus.number1 },
         { x: 7, y: 0, status: GridStatus.number1 },
@@ -180,62 +180,80 @@ export component Board inherits VerticalLayout {
     in property <int> grid-width: 9;
     in property <int> grid-height: 9;
     in property <length> grid-size: 32px;
-    HorizontalLayout {
-        spacing: 0;
-        CornerUpLeft { }
+    callback clicked(x: int, y: int);
+    callback pointer-event(x: int, y: int, event: PointerEvent);
+    callback hover-changed(x: int, y: int, value: bool);
+    callback pressed-changed(x: int, y: int, value: bool);
+    VerticalLayout {
+        HorizontalLayout {
+            spacing: 0;
+            CornerUpLeft { }
 
-        BorderHorizontal { }
+            BorderHorizontal { }
 
-        CornerUpRight { }
-    }
-
-    HorizontalLayout {
-        spacing: 0;
-        BorderVertical { }
-
-        StatusBar {
-            width: grid-width * grid-size;
-            number-left: 000;
-            number-right: 000;
-            name: FaceButtonStatus.smile;
+            CornerUpRight { }
         }
 
-        BorderVertical { }
-    }
+        HorizontalLayout {
+            spacing: 0;
+            BorderVertical { }
 
-    HorizontalLayout {
-        spacing: 0;
-        TLeft { }
-
-        BorderHorizontal { }
-
-        TRight { }
-    }
-
-    HorizontalLayout {
-        spacing: 0;
-        BorderVertical { }
-
-        Empty {
-            width: grid-width * grid-size;
-            height: grid-height * grid-size;
-            for data in root.grid-data: Grid {
-                width: grid-size;
-                x: data.x * grid-size;
-                y: data.y * grid-size;
-                status: data.status;
+            StatusBar {
+                width: grid-width * grid-size;
+                number-left: 000;
+                number-right: 000;
+                name: FaceButtonStatus.smile;
             }
+
+            BorderVertical { }
         }
 
-        BorderVertical { }
-    }
+        HorizontalLayout {
+            spacing: 0;
+            TLeft { }
 
-    HorizontalLayout {
-        spacing: 0;
-        CornerBottomLeft { }
+            BorderHorizontal { }
 
-        BorderHorizontal { }
+            TRight { }
+        }
 
-        CornerBottomRight { }
+        HorizontalLayout {
+            spacing: 0;
+            BorderVertical { }
+
+            Empty {
+                width: grid-width * grid-size;
+                height: grid-height * grid-size;
+                for data in root.grid-data: Grid {
+                    width: grid-size;
+                    x: data.x * grid-size;
+                    y: data.y * grid-size;
+                    status: data.status;
+                    clicked => {
+                        root.clicked(data.x, data.y)
+                    }
+                    pointer-event(event) => {
+                        root.pointer-event(data.x, data.y, event)
+                    }
+                    hover-changed(value) => {
+                        root.hover-changed(data.x, data.y, value)
+                    }
+                    pressed-changed(value) => {
+                        root.pressed-changed(data.x, data.y, value)
+                    }
+                }
+            }
+
+            BorderVertical { }
+        }
+
+        HorizontalLayout {
+            spacing: 0;
+            CornerBottomLeft { }
+
+            BorderHorizontal { }
+
+            CornerBottomRight { }
+        }
     }
 }

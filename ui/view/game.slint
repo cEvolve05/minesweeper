@@ -6,6 +6,13 @@ import { Board } from "../widget/board.slint";
 export global GameState {
     in-out property <int> number;
     callback set(new: int);
+    in property <int> grid-width: 9;
+    in property <int> grid-height: 9;
+    in property <length> grid-size: 32px;
+    callback clicked(x: int, y: int);
+    callback pointer-event(x: int, y: int, event: PointerEvent);
+    callback hover-changed(x: int, y: int, value: bool);
+    callback pressed-changed(x: int, y: int, value: bool);
 }
 
 export component Game inherits View {
@@ -27,6 +34,22 @@ export component Game inherits View {
     //     }
     // }
     Isolator {
-        Board { }
+        Board {
+            grid-width <=> GameState.grid-width;
+            grid-height <=> GameState.grid-height;
+            grid-size <=> GameState.grid-size;
+            clicked(x, y) => {
+                GameState.clicked(x, y)
+            }
+            pointer-event(x, y, event) => {
+                GameState.pointer-event(x, y, event)
+            }
+            hover-changed(x, y, value) => {
+                GameState.hover-changed(x, y, value)
+            }
+            pressed-changed(x, y, value) => {
+                GameState.pressed-changed(x, y, value)
+            }
+        }
     }
 }
