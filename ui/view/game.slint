@@ -1,7 +1,7 @@
 import { VerticalBox, Button } from "std-widgets.slint";
 import { Isolator } from "@project/widget/isolator.slint";
 import { View } from "@project/widget/view.slint";
-import { Board } from "../widget/board.slint";
+import { Board, GridData, GridStatus } from "../widget/board.slint";
 
 export global GameState {
     in-out property <int> number;
@@ -9,6 +9,7 @@ export global GameState {
     in property <int> grid-width: 9;
     in property <int> grid-height: 9;
     in property <length> grid-size: 32px;
+    in property <[GridData]> grid-data;
     callback clicked(x: int, y: int);
     callback pointer-event(x: int, y: int, event: PointerEvent);
     callback hover-changed(x: int, y: int, value: bool);
@@ -16,28 +17,12 @@ export global GameState {
 }
 
 export component Game inherits View {
-    // VerticalBox {
-    //     padding: 8px;
-    //     Text {
-    //         text: "Game" + GameState.number;
-    //         vertical-alignment: TextVerticalAlignment.center;
-    //         horizontal-alignment: TextHorizontalAlignment.center;
-    //     }
-
-    //     Empty {
-    //         Button {
-    //             text: "increase";
-    //             clicked => {
-    //                 GameState.set(GameState.number + 1)
-    //             }
-    //         }
-    //     }
-    // }
     Isolator {
         Board {
             grid-width <=> GameState.grid-width;
             grid-height <=> GameState.grid-height;
             grid-size <=> GameState.grid-size;
+            grid-data <=> GameState.grid-data;
             clicked(x, y) => {
                 GameState.clicked(x, y)
             }

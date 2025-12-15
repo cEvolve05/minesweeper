@@ -1,26 +1,198 @@
-import { VerticalBox, Button } from "std-widgets.slint";
+import { VerticalBox, Button, TextEdit } from "std-widgets.slint";
 import { Empty } from "@project/widget/empty.slint";
 import { View } from "@project/widget/view.slint";
 
+export enum Difficulty {
+    Easy,
+    Medium,
+    Hard,
+    Custom,
+}
+
+export struct GameConfig {
+    width: int,
+    height: int,
+    mine_count: int,
+}
+
 export global SettingState {
-    in-out property <int> number;
-    callback set(new: int);
+    in-out property <Difficulty> difficulty: Difficulty.Easy;
+    in-out property <GameConfig> custom-config: { width: 9, height: 9, mine_count: 10 };
 }
 
 export component Setting inherits View {
-    VerticalBox {
+    function difficulty-to-string(difficulty: Difficulty) -> string {
+        if (difficulty == Difficulty.Easy) {
+            return "Easy";
+        }
+        if (difficulty == Difficulty.Medium) {
+            return "Medium";
+        }
+        if (difficulty == Difficulty.Hard) {
+            return "Hard";
+        }
+        if (difficulty == Difficulty.Custom) {
+            return "Custom";
+        }
+        return "Unknown";
+    }
+    //difficulty selection
+    VerticalLayout {
         padding: 8px;
+        spacing: 8px;
         Text {
-            text: "Setting" + SettingState.number;
-            vertical-alignment: TextVerticalAlignment.center;
-            horizontal-alignment: TextHorizontalAlignment.center;
+            text: "难度选择";
+            font-weight: 800;
+            font-size: 24px;
         }
 
-        Empty {
+        Text {
+            text: "现在选择：" + difficulty-to-string(SettingState.difficulty) + "\n（重新开始游戏后生效）";
+        }
+
+        HorizontalLayout {
+            padding: 8px;
+            spacing: 8px;
             Button {
-                text: "increase";
+                text: "Easy";
                 clicked => {
-                    SettingState.set(SettingState.number + 1)
+                    SettingState.difficulty = Difficulty.Easy;
+                }
+            }
+
+            Button {
+                text: "Medium";
+                clicked => {
+                    SettingState.difficulty = Difficulty.Medium;
+                }
+            }
+
+            Button {
+                text: "Hard";
+                clicked => {
+                    SettingState.difficulty = Difficulty.Hard;
+                }
+            }
+
+            Button {
+                text: "Custom";
+                clicked => {
+                    SettingState.difficulty = Difficulty.Custom;
+                }
+            }
+        }
+
+        Text {
+            text: "Custom 难度配置";
+            font-weight: 800;
+            font-size: 24px;
+        }
+        //custom selection with grid size and mine count
+        VerticalLayout {
+            padding: 8px;
+            spacing: 8px;
+            HorizontalLayout {
+                spacing: 8px;
+                alignment: LayoutAlignment.space-around;
+                Text {
+                    width: 100px;
+                    text: "Width";
+                    horizontal-alignment: TextHorizontalAlignment.center;
+                    vertical-alignment: TextVerticalAlignment.center;
+                }
+
+                HorizontalLayout {
+                    spacing: 8px;
+                    Button {
+                        text: "-";
+                        clicked => {
+                            SettingState.custom-config.width -= 1;
+                        }
+                    }
+
+                    Text {
+                        width: 50px;
+                        text: SettingState.custom-config.width;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                    }
+
+                    Button {
+                        text: "+";
+                        clicked => {
+                            SettingState.custom-config.width += 1;
+                        }
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                spacing: 8px;
+                alignment: LayoutAlignment.space-around;
+                Text {
+                    width: 100px;
+                    text: "Height";
+                    horizontal-alignment: TextHorizontalAlignment.center;
+                    vertical-alignment: TextVerticalAlignment.center;
+                }
+
+                HorizontalLayout {
+                    spacing: 8px;
+                    Button {
+                        text: "-";
+                        clicked => {
+                            SettingState.custom-config.height -= 1;
+                        }
+                    }
+
+                    Text {
+                        width: 50px;
+                        text: SettingState.custom-config.height;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                    }
+
+                    Button {
+                        text: "+";
+                        clicked => {
+                            SettingState.custom-config.height += 1;
+                        }
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                spacing: 8px;
+                alignment: LayoutAlignment.space-around;
+                Text {
+                    width: 100px;
+                    text: "Mine Count";
+                    horizontal-alignment: TextHorizontalAlignment.center;
+                    vertical-alignment: TextVerticalAlignment.center;
+                }
+
+                HorizontalLayout {
+                    spacing: 8px;
+                    Button {
+                        text: "-";
+                        clicked => {
+                            SettingState.custom-config.mine-count -= 1;
+                        }
+                    }
+
+                    Text {
+                        width: 50px;
+                        text: SettingState.custom-config.mine-count;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                    }
+
+                    Button {
+                        text: "+";
+                        clicked => {
+                            SettingState.custom-config.mine-count += 1;
+                        }
+                    }
                 }
             }
         }

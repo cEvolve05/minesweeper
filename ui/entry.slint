@@ -10,10 +10,12 @@ import { ViewName, ViewManagerState } from "@project/logic/view_manager.slint";
 // views that need to be controlled from native code
 import { Game } from "@project/view/game.slint";
 export { GameState } from "@project/view/game.slint";
+export { GridData } from "@project/widget/board.slint";
+export { GridStatus } from "@project/widget/grid.slint";
 import { Scoreboard } from "@project/view/scoreboard.slint";
 export { ScoreboardState } from "@project/view/scoreboard.slint";
 import { Setting } from "@project/view/setting.slint";
-export { SettingState } from "@project/view/setting.slint";
+export { SettingState, GameConfig, Difficulty } from "@project/view/setting.slint";
 
 component Debug {
     HorizontalBox {
@@ -33,11 +35,9 @@ component Debug {
 export component Entry inherits Window {
     preferred-height: 800px;
     preferred-width: 600px;
-
     init => {
         Palette.color-scheme = ColorScheme.light
     }
-
     VerticalLayout {
         Debug {
             height: 50px;

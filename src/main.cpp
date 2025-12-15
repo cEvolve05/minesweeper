@@ -1,10 +1,10 @@
 #include "entry.h"
-#include "logic/state_accessor.hpp"
+#include "view/game.h"
 
 int main(int argc, char** argv) {
     auto ui = ui::Entry::create();
-    // StateAccessor<ui::MainState> mainState(ui);
-    // mainState->on_set([&](int value) { mainState->set_number(value); });
+
+    GameView gameView(ui);
 
     ui->run();
     return 0;
