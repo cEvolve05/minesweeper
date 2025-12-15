@@ -1,4 +1,4 @@
-import { VerticalBox, Button, TextEdit } from "std-widgets.slint";
+import { VerticalBox, TextEdit } from "std-widgets.slint";
 import { Empty } from "@project/widget/empty.slint";
 import { View } from "@project/widget/view.slint";
 
@@ -29,14 +29,12 @@ component ConfigItemInt inherits HorizontalLayout {
     in property <int> max-value;
     spacing: 8px;
     alignment: LayoutAlignment.space-around;
+
     function clamp-value() {
-        if (value < min-value) {
-            value = min-value;
-        }
-        if (value > max-value) {
-            value = max-value;
-        }
+        if (value < min-value) { value = min-value; }
+        if (value > max-value) { value = max-value; }
     }
+
     Text {
         width: 100px;
         text <=> text;
@@ -46,134 +44,224 @@ component ConfigItemInt inherits HorizontalLayout {
 
     HorizontalLayout {
         spacing: 8px;
-        Button {
-            text: "-";
-            clicked => {
-                value -= 1;
-                clamp-value();
+
+        Rectangle {
+            width: 32px; height: 32px; background: #ecf0f1;
+            Text {
+                text: "-";
+                horizontal-alignment: TextHorizontalAlignment.center;
+                vertical-alignment: TextVerticalAlignment.center;
             }
+            TouchArea { clicked => { value -= 1; clamp-value(); } }
         }
 
         Text {
             width: 50px;
             text: value;
-            vertical-alignment: TextVerticalAlignment.center;
             horizontal-alignment: TextHorizontalAlignment.center;
+            vertical-alignment: TextVerticalAlignment.center;
             TouchArea {
                 scroll-event(event) => {
-                    if (event.delta_y < 0) {
-                        value -= 1;
-                    } else if (event.delta_y > 0) {
-                        value += 1;
-                    }
+                    if (event.delta_y < 0) { value -= 1; }
+                    else if (event.delta_y > 0) { value += 1; }
                     clamp-value();
                     return EventResult.accept;
                 }
             }
         }
 
-        Button {
-            text: "+";
-            clicked => {
-                value += 1;
-                clamp-value();
+        Rectangle {
+            width: 32px; height: 32px; background: #ecf0f1;
+            Text {
+                text: "+";
+                horizontal-alignment: TextHorizontalAlignment.center;
+                vertical-alignment: TextVerticalAlignment.center;
             }
+            TouchArea { clicked => { value += 1; clamp-value(); } }
         }
     }
 }
 
 export component Setting inherits View {
     function difficulty-to-string(difficulty: Difficulty) -> string {
-        if (difficulty == Difficulty.Easy) {
-            return "Easy";
-        }
-        if (difficulty == Difficulty.Medium) {
-            return "Medium";
-        }
-        if (difficulty == Difficulty.Hard) {
-            return "Hard";
-        }
-        if (difficulty == Difficulty.Custom) {
-            return "Custom";
-        }
+        if (difficulty == Difficulty.Easy) { return "Easy"; }
+        if (difficulty == Difficulty.Medium) { return "Medium"; }
+        if (difficulty == Difficulty.Hard) { return "Hard"; }
+        if (difficulty == Difficulty.Custom) { return "Custom"; }
         return "Unknown";
     }
-    //difficulty selection
+
     VerticalLayout {
         padding: 8px;
         spacing: 8px;
-        alignment: LayoutAlignment.start;
-        width: 288px;
-        Text {
-            text: "难度选择";
-            font-weight: 800;
-            font-size: 24px;
-        }
 
-        Text {
-            text: "现在选择：" + difficulty-to-string(SettingState.difficulty) + "\n（重新开始游戏后生效）";
-        }
-
-        HorizontalLayout {
-            padding: 8px;
-            spacing: 8px;
-            Button {
-                text: "Easy";
-                clicked => {
-                    SettingState.difficulty = Difficulty.Easy;
-                }
-            }
-
-            Button {
-                text: "Medium";
-                clicked => {
-                    SettingState.difficulty = Difficulty.Medium;
-                }
-            }
-
-            Button {
-                text: "Hard";
-                clicked => {
-                    SettingState.difficulty = Difficulty.Hard;
-                }
-            }
-
-            Button {
-                text: "Custom";
-                clicked => {
-                    SettingState.difficulty = Difficulty.Custom;
-                }
-            }
-        }
-
-        Text {
-            text: "Custom 难度配置";
-            font-weight: 800;
-            font-size: 24px;
-        }
-        //custom selection with grid size and mine count
+        // 标题区域
         VerticalLayout {
-            padding: 8px;
             spacing: 8px;
-            ConfigItemInt {
-                text: "Width";
-                value <=> SettingState.custom-config-width;
-                min-value: 1;
-                max-value: 50;
+            width: 100%;
+
+            Text {
+                text: "难度选择";
+                font-weight: 900;
+                font-size: 28px;
+                horizontal-alignment: TextHorizontalAlignment.center;
+                width: 100%;
+                color: #2c3e50;
             }
 
-            ConfigItemInt {
-                text: "Height";
-                value <=> SettingState.custom-config-height;
-                min-value: 1;
-                max-value: 50;
+            Text {
+                text: "现在选择：" + difficulty-to-string(SettingState.difficulty);
+                font-size: 18px;
+                horizontal-alignment: TextHorizontalAlignment.center;
+                width: 100%;
+                color: #34495e;
+                font-weight: 500;
             }
 
-            ConfigItemInt {
-                text: "Mine Count";
-                value <=> SettingState.custom-config-mine-count;
-                min-value: 1;
-                max-value: 50;
+            Text {
+                text: "（重新开始游戏后生效）";
+                font-size: 14px;
+                horizontal-alignment: TextHorizontalAlignment.center;
+                width: 100%;
+                color: #7f8c8d;
+            }
+        }
+
+        Rectangle { height: 1px; width: 100%; background: #9baaa0ff; }
+
+        // 难度按钮区域
+        VerticalLayout {
+            spacing: 4px;
+            width: 100%;
+
+            Text {
+                text: "\n请选择一个难度级别：";
+                font-size: 16px;
+                horizontal-alignment: TextHorizontalAlignment.left;
+                width: 100%;
+                color: #242323ff;
+            }
+
+            HorizontalLayout {
+                spacing: 8px;
+                padding: 8px;
+
+                // Easy
+                Rectangle {
+                    width: 80px; height: 32px;
+                    property <bool> selected: SettingState.difficulty == Difficulty.Easy;
+                    background: selected ? #3498db : #ecf0f1;
+
+                    Text {
+                        text: "Easy";
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        color: selected ? #ffffff : #000000;
+                    }
+
+                    TouchArea { clicked => { SettingState.difficulty = Difficulty.Easy; } }
+                }
+
+                // Medium
+                Rectangle {
+                    width: 80px; height: 32px;
+                    property <bool> selected: SettingState.difficulty == Difficulty.Medium;
+                    background: selected ? #3498db : #ecf0f1;
+
+                    Text {
+                        text: "Medium";
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        color: selected ? #ffffff : #000000;
+                    }
+
+                    TouchArea { clicked => { SettingState.difficulty = Difficulty.Medium; } }
+                }
+
+                // Hard
+                Rectangle {
+                    width: 80px; height: 32px;
+                    property <bool> selected: SettingState.difficulty == Difficulty.Hard;
+                    background: selected ? #3498db : #ecf0f1;
+
+                    Text {
+                        text: "Hard";
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        color: selected ? #ffffff : #000000;
+                    }
+
+                    TouchArea { clicked => { SettingState.difficulty = Difficulty.Hard; } }
+                }
+
+                // Custom
+                Rectangle {
+                    width: 80px; height: 32px;
+                    property <bool> selected: SettingState.difficulty == Difficulty.Custom;
+                    background: selected ? #3498db : #ecf0f1;
+
+                    Text {
+                        text: "Custom";
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        color: selected ? #ffffff : #000000;
+                    }
+
+                    TouchArea { clicked => { SettingState.difficulty = Difficulty.Custom; } }
+                }
+            }
+        }
+
+        // Custom 配置区域
+        Rectangle {
+            width: 100%;
+            padding: 16px;
+            background: #f1f4f7ff;
+            visible: SettingState.difficulty == Difficulty.Custom;
+
+            VerticalLayout {
+                spacing: 16px;
+                width: 100%;
+
+                Text {
+                    text: "Custom 难度配置";
+                    font-size: 24px;
+                    horizontal-alignment: TextHorizontalAlignment.left;
+                    width: 100%;
+                }
+
+                VerticalBox {
+                    spacing: 16px;
+                    padding: 8px;
+
+                    ConfigItemInt {
+                        text: "Width";
+                        value: SettingState.custom-config-width;
+                        min-value: 9;
+                        max-value: 24;
+                    }
+
+                    ConfigItemInt {
+                        text: "Height";
+                        value: SettingState.custom-config-height;
+                        min-value: 9;
+                        max-value: 24;
+                    }
+
+                    ConfigItemInt {
+                        text: "Mine Count";
+                        value: SettingState.custom-config-mine-count;
+                        min-value: 10;
+                        max-value: 500;
+                    }
+                }
+
+                Text {
+                    text: "建议：宽度和高度范围为 9-24，地雷数量不超过总格子数的 20%";
+                    font-size: 12px;
+                    horizontal-alignment: TextHorizontalAlignment.center;
+                    width: 100%;
+                }
             }
         }
     }
