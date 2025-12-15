@@ -74,6 +74,7 @@ class GameView : StateAccessor<ui::GameState> {
         self->set_grid_height(config.height);
         self->set_grid_width(config.width);
         self->set_flag_counter(config.mine_count);
+        self->set_face_status(ui::FaceButtonStatus::Smile);
         spdlog::info("GameView::restart width: {}, height: {}, mines: {}", config.width, config.height,
                      config.mine_count);
 
@@ -239,6 +240,7 @@ class GameView : StateAccessor<ui::GameState> {
         gameRunning = false;
         auto self = *this;
         auto time = self->get_time_in_second();
+        self->set_face_status(ui::FaceButtonStatus::Lose);
         // show game over
         stopTimeCounter(false);
     }
