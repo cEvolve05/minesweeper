@@ -25,29 +25,25 @@ export global GameState {
     callback face_clicked();
 }
 
-export component Game inherits View {
-    Isolator {
-        Board {
-            grid-width <=> GameState.grid-width;
-            grid-height <=> GameState.grid-height;
-            grid-size <=> GameState.grid-size;
-            grid-data <=> GameState.grid-data;
-            flag-counter: GameState.flag-counter;
-            time-in-second: GameState.time-in-second;
-            face-status: GameState.face-status;
-            clicked(x, y) => {
-                GameState.clicked(x, y)
-            }
-            pointer-event(x, y, event) => {
-                GameState.pointer-event(x, y, event)
-            }
-            hover-changed(x, y, value) => {
-                GameState.hover-changed(x, y, value)
-            }
-            pressed-changed(x, y, value) => {
-                GameState.pressed-changed(x, y, value)
-            }
-            face_clicked => GameState.face_clicked();
-        }
+export component Game inherits Board {
+    grid-width <=> GameState.grid-width;
+    grid-height <=> GameState.grid-height;
+    grid-size <=> GameState.grid-size;
+    grid-data <=> GameState.grid-data;
+    flag-counter: GameState.flag-counter;
+    time-in-second: GameState.time-in-second;
+    face-status: GameState.face-status;
+    clicked(x, y) => {
+        GameState.clicked(x, y)
     }
+    pointer-event(x, y, event) => {
+        GameState.pointer-event(x, y, event)
+    }
+    hover-changed(x, y, value) => {
+        GameState.hover-changed(x, y, value)
+    }
+    pressed-changed(x, y, value) => {
+        GameState.pressed-changed(x, y, value)
+    }
+    face_clicked => GameState.face_clicked();
 }
