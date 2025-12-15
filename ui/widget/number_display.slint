@@ -4,6 +4,10 @@ export component NumberDisplay {
     in property <int> number;
     width: 82px;
     height: self.width / 41 * 25;
+    function int_(number: float) -> int {
+        let res: int = number;
+        return res;
+    }
     Image {
         x: 0;
         y: 0;
@@ -18,22 +22,17 @@ export component NumberDisplay {
         spacing: root.width / 41 * 2;
         Digit {
             width: root.width / 82 * 22;
-            number: int(number / 100);
+            number: int_(number / 100);
         }
 
         Digit {
             width: root.width / 82 * 22;
-            number: int(number / 10) - int(number / 100) * 10;
+            number: int_(number / 10) - int_(number / 100) * 10;
         }
 
         Digit {
             width: root.width / 82 * 22;
-            number: number - int(number / 10) * 10;
+            number: number - int_(number / 10) * 10;
         }
-    }
-
-    function int(number: float) -> int {
-        let res: int = number;
-        return res;
     }
 }

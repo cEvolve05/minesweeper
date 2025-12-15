@@ -32,6 +32,37 @@ component Debug {
     }
 }
 
+component TitlebarItem inherits Rectangle {
+    in property <string> text;
+    callback clicked();
+    HorizontalLayout {
+        padding: 4px;
+        padding-left: 12px;
+        padding-right: 12px;
+        alignment: LayoutAlignment.center;
+        Text {
+            text: text;
+            font-size: 14px;
+            vertical-alignment: TextVerticalAlignment.center;
+        }
+    }
+
+    _area := TouchArea {
+        width: parent.width;
+        height: parent.height;
+        mouse-cursor: MouseCursor.pointer;
+        clicked => {
+            clicked();
+        }
+    }
+
+    states [
+        hovered when _area.has-hover: {
+            background: #008cff;
+        }
+    ]
+}
+
 export component Entry inherits Window {
     preferred-height: 800px;
     preferred-width: 600px;
@@ -39,8 +70,29 @@ export component Entry inherits Window {
         Palette.color-scheme = ColorScheme.light
     }
     VerticalLayout {
-        Debug {
-            height: 50px;
+        HorizontalLayout {
+            height: 26px;
+            alignment: LayoutAlignment.start;
+            TitlebarItem {
+                text: "Game";
+                clicked => {
+                    ViewManagerState.current-view = ViewName.Game;
+                }
+            }
+
+            TitlebarItem {
+                text: "Setting";
+                clicked => {
+                    ViewManagerState.current-view = ViewName.Setting;
+                }
+            }
+
+            TitlebarItem {
+                text: "Scoreboard";
+                clicked => {
+                    ViewManagerState.current-view = ViewName.Scoreboard;
+                }
+            }
         }
 
         if ViewManagerState.current-view == ViewName.Game:

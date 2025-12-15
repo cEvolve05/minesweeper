@@ -1,3 +1,5 @@
+#pragma once
+
 class Singleton {
     Singleton() = default;
     ~Singleton() = default;
