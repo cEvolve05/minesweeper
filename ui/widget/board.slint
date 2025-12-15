@@ -11,19 +11,6 @@ export struct GridData {
     status: GridStatus,
 }
 
-component BoardGrid {
-    in property <[GridData]> grid-data:[{ x:0, y:1, status:GridStatus.closed-flag }];
-    in property <length> grid-size;
-    callback open(x: int, y: int);
-    callback toggle-flag(x: int, y: int);
-}
-
-component StatusBar inherits Rectangle {
-    in property <int> number-left;
-    in property <int> number-right;
-    in property <FaceButtonStatus> status;
-    callback clicked();
-}
 
 component BorderHorizontal inherits Image {
     height: 22px;

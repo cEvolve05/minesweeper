@@ -22,7 +22,9 @@ class SettingView : StateAccessor<ui::SettingState> {
             return {.width = 30, .height = 16, .mine_count = 99};
             break;
         case ui::Difficulty::Custom:
-            return self->get_custom_config();
+            return {.width = self->get_custom_config_width(),
+                    .height = self->get_custom_config_height(),
+                    .mine_count = self->get_custom_config_mine_count()};
             break;
         default:
             spdlog::warn("Unknown difficulty, use Easy as default");

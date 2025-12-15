@@ -17,7 +17,69 @@ export struct GameConfig {
 
 export global SettingState {
     in-out property <Difficulty> difficulty: Difficulty.Easy;
-    in-out property <GameConfig> custom-config: { width: 9, height: 9, mine_count: 10 };
+    in-out property <int> custom-config-width: 9;
+    in-out property <int> custom-config-height: 9;
+    in-out property <int> custom-config-mine-count: 10;
+}
+
+component ConfigItemInt inherits HorizontalLayout {
+    in property <string> text;
+    in-out property <int> value;
+    in property <int> min-value;
+    in property <int> max-value;
+    spacing: 8px;
+    alignment: LayoutAlignment.space-around;
+    function clamp-value() {
+        if (value < min-value) {
+            value = min-value;
+        }
+        if (value > max-value) {
+            value = max-value;
+        }
+    }
+    Text {
+        width: 100px;
+        text <=> text;
+        horizontal-alignment: TextHorizontalAlignment.center;
+        vertical-alignment: TextVerticalAlignment.center;
+    }
+
+    HorizontalLayout {
+        spacing: 8px;
+        Button {
+            text: "-";
+            clicked => {
+                value -= 1;
+                clamp-value();
+            }
+        }
+
+        Text {
+            width: 50px;
+            text: value;
+            vertical-alignment: TextVerticalAlignment.center;
+            horizontal-alignment: TextHorizontalAlignment.center;
+            TouchArea {
+                scroll-event(event) => {
+                    if (event.delta_y < 0) {
+                        value -= 1;
+                    } else if (event.delta_y > 0) {
+                        value += 1;
+                    }
+                    clamp-value();
+                    return EventResult.accept;
+                }
+            }
+        }
+
+        Button {
+            text: "+";
+            clicked => {
+                value += 1;
+                clamp-value();
+            }
+        }
+    }
 }
 
 export component Setting inherits View {
@@ -40,6 +102,8 @@ export component Setting inherits View {
     VerticalLayout {
         padding: 8px;
         spacing: 8px;
+        alignment: LayoutAlignment.start;
+        width: 288px;
         Text {
             text: "难度选择";
             font-weight: 800;
@@ -91,109 +155,25 @@ export component Setting inherits View {
         VerticalLayout {
             padding: 8px;
             spacing: 8px;
-            HorizontalLayout {
-                spacing: 8px;
-                alignment: LayoutAlignment.space-around;
-                Text {
-                    width: 100px;
-                    text: "Width";
-                    horizontal-alignment: TextHorizontalAlignment.center;
-                    vertical-alignment: TextVerticalAlignment.center;
-                }
-
-                HorizontalLayout {
-                    spacing: 8px;
-                    Button {
-                        text: "-";
-                        clicked => {
-                            SettingState.custom-config.width -= 1;
-                        }
-                    }
-
-                    Text {
-                        width: 50px;
-                        text: SettingState.custom-config.width;
-                        vertical-alignment: TextVerticalAlignment.center;
-                        horizontal-alignment: TextHorizontalAlignment.center;
-                    }
-
-                    Button {
-                        text: "+";
-                        clicked => {
-                            SettingState.custom-config.width += 1;
-                        }
-                    }
-                }
+            ConfigItemInt {
+                text: "Width";
+                value <=> SettingState.custom-config-height;
+                min-value: 1;
+                max-value: 50;
             }
 
-            HorizontalLayout {
-                spacing: 8px;
-                alignment: LayoutAlignment.space-around;
-                Text {
-                    width: 100px;
-                    text: "Height";
-                    horizontal-alignment: TextHorizontalAlignment.center;
-                    vertical-alignment: TextVerticalAlignment.center;
-                }
-
-                HorizontalLayout {
-                    spacing: 8px;
-                    Button {
-                        text: "-";
-                        clicked => {
-                            SettingState.custom-config.height -= 1;
-                        }
-                    }
-
-                    Text {
-                        width: 50px;
-                        text: SettingState.custom-config.height;
-                        vertical-alignment: TextVerticalAlignment.center;
-                        horizontal-alignment: TextHorizontalAlignment.center;
-                    }
-
-                    Button {
-                        text: "+";
-                        clicked => {
-                            SettingState.custom-config.height += 1;
-                        }
-                    }
-                }
+            ConfigItemInt {
+                text: "Height";
+                value <=> SettingState.custom-config-height;
+                min-value: 1;
+                max-value: 50;
             }
 
-            HorizontalLayout {
-                spacing: 8px;
-                alignment: LayoutAlignment.space-around;
-                Text {
-                    width: 100px;
-                    text: "Mine Count";
-                    horizontal-alignment: TextHorizontalAlignment.center;
-                    vertical-alignment: TextVerticalAlignment.center;
-                }
-
-                HorizontalLayout {
-                    spacing: 8px;
-                    Button {
-                        text: "-";
-                        clicked => {
-                            SettingState.custom-config.mine-count -= 1;
-                        }
-                    }
-
-                    Text {
-                        width: 50px;
-                        text: SettingState.custom-config.mine-count;
-                        vertical-alignment: TextVerticalAlignment.center;
-                        horizontal-alignment: TextHorizontalAlignment.center;
-                    }
-
-                    Button {
-                        text: "+";
-                        clicked => {
-                            SettingState.custom-config.mine-count += 1;
-                        }
-                    }
-                }
+            ConfigItemInt {
+                text: "Mine Count";
+                value <=> SettingState.custom-config-mine-count;
+                min-value: 1;
+                max-value: 50;
             }
         }
     }
