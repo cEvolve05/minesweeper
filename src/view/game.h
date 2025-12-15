@@ -25,13 +25,17 @@ class GameView : StateAccessor<ui::GameState> {
     std::shared_ptr<slint::VectorModel<ui::GridData>> shardData;
     std::pair<int, int> gridSize; // x, y
     slint::Timer* timeCounter;
+    bool gameRunning = true;
 
   public:
     GameView(slint::ComponentHandle<UiEntry> uiEntry)
         : StateAccessor(uiEntry), timeCounter(new slint::Timer()),
           shardData(std::make_shared<slint::VectorModel<ui::GridData>>()) {
         auto self = *this;
-        self->on_clicked([this](int x, int y) { open(x, y); });
+        self->on_clicked([this](int x, int y) {
+            open(x, y);
+            tryWin();
+        });
         self->on_pointer_event([this](int x, int y, slint::private_api::PointerEvent event) {
             if (event.button == slint::private_api::PointerEventButton::Right &&
                 event.kind == slint::private_api::PointerEventKind::Down) {
@@ -50,10 +54,12 @@ class GameView : StateAccessor<ui::GameState> {
         });
     }
 
-    void stopTimeCounter() {
+    void stopTimeCounter(bool reset = true) {
         timeCounter->stop();
         auto self = *this;
-        self->set_time_in_second(0);
+        if (reset) {
+            self->set_time_in_second(0);
+        }
     }
 
     void restart() {
@@ -63,6 +69,7 @@ class GameView : StateAccessor<ui::GameState> {
         stopTimeCounter();
         shardData->clear();
         gridMap.clear();
+        gameRunning = true;
         auto totalGrids = config.width * config.height;
         self->set_grid_height(config.height);
         self->set_grid_width(config.width);
@@ -95,6 +102,9 @@ class GameView : StateAccessor<ui::GameState> {
     }
 
     void open(int x, int y) {
+        if (!gameRunning) {
+            return;
+        }
         auto& thisGridRef = gridMap[{x, y}];
         spdlog::info("GameView::clicked ({}, {})", x, y);
         if (!thisGridRef.isOpened) {
@@ -190,6 +200,9 @@ class GameView : StateAccessor<ui::GameState> {
     }
 
     void flag(int x, int y) {
+        if (!gameRunning) {
+            return;
+        }
         spdlog::info("GameView::flagged ({}, {})", x, y);
         auto& thisGridRef = gridMap[{x, y}];
         if (!thisGridRef.isOpened) {
@@ -207,12 +220,27 @@ class GameView : StateAccessor<ui::GameState> {
         }
     }
 
+    void tryWin() {
+        for (auto& [loc, gridRef] : gridMap) {
+            if (!gridRef.isMine && !gridRef.isOpened) {
+                return;
+            }
+        }
+        spdlog::info("Win!");
+        gameRunning = false;
+        auto self = *this;
+        auto time = self->get_time_in_second();
+        // show win
+        stopTimeCounter(false);
+    }
+
     void gameover() {
         spdlog::info("Game Over!");
+        gameRunning = false;
         auto self = *this;
         auto time = self->get_time_in_second();
         // show game over
-        stopTimeCounter();
+        stopTimeCounter(false);
     }
 
   private:
