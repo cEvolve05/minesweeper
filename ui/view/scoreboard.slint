@@ -1,32 +1,211 @@
 import { Button } from "std-widgets.slint";
-import { Empty } from "@project/widget/empty.slint";
 import { View } from "@project/widget/view.slint";
 
 export struct ScoreboardItem {
     name: string,
-    time: string,
+    time: int,
     difficulty: string,
+    width: int,
+    height: int,
+    mine_count: int,
 }
 
 export global ScoreboardState {
-    in property <[ScoreboardItem]> items;
-    property <length> name-size;
-    property <length> time-size;
-    property <length> difficulty-size;
+    in property <[ScoreboardItem]> easy-items: [
+        { name: "John Doe", time: 45, difficulty: "Easy", width: 0, height: 0, mine_count: 0 },
+        { name: "Newbie", time: 65, difficulty: "Easy", width: 0, height: 0, mine_count: 0 },
+    ];
+    in property <[ScoreboardItem]> medium-items: [
+        { name: "Sonia K.", time: 55, difficulty: "Medium", width: 0, height: 0, mine_count: 0 },
+        { name: "Alice", time: 70, difficulty: "Medium", width: 0, height: 0, mine_count: 0 },
+    ];
+    in property <[ScoreboardItem]> hard-items: [
+        { name: "Bob B.", time: 150, difficulty: "Hard", width: 0, height: 0, mine_count: 0 },
+        { name: "Player 5", time: 181, difficulty: "Hard", width: 0, height: 0, mine_count: 0 },
+    ];
+    in property <[ScoreboardItem]> custom-items: [
+        { name: "Pro_M", time: 60, difficulty: "Custom", width: 10, height: 10, mine_count: 20 },
+        { name: "GamerX", time: 80, difficulty: "Custom", width: 4, height: 5, mine_count: 6 },
+    ];
+    in property <length> name-size: 140px;
+    in property <length> time-size: 80px;
+    in property <length> custom-desc-size: 140px;
 }
 
 component ScoreboardTitle {
     Text {
-        text: "Scoreboard";
+        text: "Game Scoreboard";
+        font-size: 24px;
+        font-weight: 700;
         vertical-alignment: TextVerticalAlignment.center;
         horizontal-alignment: TextHorizontalAlignment.center;
+        color: #333333;
+    }
+}
+
+component ScoreboardEntry {
+    in property <ScoreboardItem> item;
+    pure function customLabel(it: ScoreboardItem) -> string {
+        return "(" + it.width + "x" + it.height + ", " + it.mine_count + " mines)";
+    }
+    Rectangle {
+        height: 28px;
+        HorizontalLayout {
+            spacing: 12px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            Text {
+                text: item.name;
+                width: ScoreboardState.name-size;
+                vertical-alignment: TextVerticalAlignment.center;
+                overflow: elide;
+            }
+
+            Text {
+                text: item.time;
+                width: ScoreboardState.time-size;
+                horizontal-alignment: TextHorizontalAlignment.right;
+                vertical-alignment: TextVerticalAlignment.center;
+            }
+            
+            // 使用 if 而不是 if/else，避免解析歧义
+            if (item.difficulty == "Custom"): Text {
+                text: customLabel(item);
+                width: ScoreboardState.custom-desc-size;
+                horizontal-alignment: TextHorizontalAlignment.right;
+                vertical-alignment: TextVerticalAlignment.center;
+                color: #666666;
+                font-size: 12px;
+            }
+            
+            // 使用可见性控制代替 else，确保布局结构简单
+            if (item.difficulty != "Custom"): Rectangle {
+                width: ScoreboardState.custom-desc-size;
+                background: transparent;
+            }
+        }
+    }
+}
+
+component DifficultySection {
+    in property <string> title-text;
+    in property <[ScoreboardItem]> items;
+    in property <bool> is-custom: false;
+    VerticalLayout {
+        spacing: 0px;
+        
+        // 1. 区域标题
+        Text {
+            text: root.title-text;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A73E8; 
+            // margin-bottom: 4px;
+        }
+
+        // 2. 表头
+        HorizontalLayout {
+            spacing: 12px;
+            Text {
+                text: "Name";
+                width: ScoreboardState.name-size;
+                font-weight: 600;
+                color: #555555;
+            }
+
+            Text {
+                text: "Time/s";
+                width: ScoreboardState.time-size;
+                horizontal-alignment: TextHorizontalAlignment.right;
+                font-weight: 600;
+                color: #555555;
+            }
+
+            Text {
+                text: root.is-custom ? "Details" : "";
+                width: ScoreboardState.custom-desc-size;
+                horizontal-alignment: TextHorizontalAlignment.right;
+                font-weight: 600;
+                color: #555555;
+            }
+        }
+
+        Rectangle {
+            height: 1px;
+            background: #cccccc;
+            // margin_top: 4px;
+            // margin_bottom: 6px;
+        }
+
+        if (root.items.length == 0): Text {
+            text: "No scores yet";
+            color: #888888; 
+            // italic: true; // 部分版本可能不支持 italic 属性，如报错可注释掉
+            vertical-alignment: TextVerticalAlignment.center;
+        }
+        
+        // 情况 B: 有数据时显示列表 (如果 items 为空，for 循环自然不执行)
+        for item in root.items: ScoreboardEntry {
+            item: item;
+        }
+
+        // 底部增加一点间距
+        Rectangle {
+            height: 10px;
+            background: transparent;
+        }
     }
 }
 
 export component Scoreboard inherits View {
+    pure function calculateWidth() -> length {
+        return ScoreboardState.name-size + ScoreboardState.time-size + ScoreboardState.custom-desc-size + 12px * 2 + 32px;
+    }
+    min-width: calculateWidth();
     VerticalLayout {
-        padding: 8px;
+        width: 100%;
+        padding: 16px;
         alignment: LayoutAlignment.start;
-        for item in ScoreboardState.items: Rectangle { }
+        HorizontalLayout {
+            width: 100%;
+            alignment: LayoutAlignment.center;
+            VerticalLayout {
+                width: calculateWidth();
+                spacing: 24px; 
+
+                // 顶部标题
+                ScoreboardTitle { }
+
+                // --- 简单区域 ---
+                DifficultySection {
+                    title-text: "Easy";
+                    items: ScoreboardState.easy-items;
+                }
+                
+                // --- 中等区域 ---
+                DifficultySection {
+                    title-text: "Medium";
+                    items: ScoreboardState.medium-items;
+                }
+
+                // --- 困难区域 ---
+                DifficultySection {
+                    title-text: "Hard";
+                    items: ScoreboardState.hard-items;
+                }
+
+                // --- 自定义区域 ---
+                DifficultySection {
+                    title-text: "Custom";
+                    items: ScoreboardState.custom-items;
+                    is-custom: true;
+                }
+
+                Rectangle {
+                    height: 20px;
+                    background: transparent;
+                }
+            }
+        }
     }
 }
