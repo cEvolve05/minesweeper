@@ -98,232 +98,82 @@ export component Setting inherits View {
         }
         return "Unknown";
     }
-
+    //difficulty selection
     VerticalLayout {
         padding: 8px;
         spacing: 8px;
+        alignment: LayoutAlignment.start;
+        width: 288px;
+        Text {
+            text: "难度选择";
+            font-weight: 800;
+            font-size: 24px;
+        }
 
-        VerticalLayout {
+        Text {
+            text: "现在选择：" + difficulty-to-string(SettingState.difficulty) + "\n（重新开始游戏后生效）";
+        }
+
+        HorizontalLayout {
+            padding: 8px;
             spacing: 8px;
-            width: 100%;
-            
-            Text {
-                text: "难度选择";
-                font-weight: 900;
-                font-size: 28px;
-                horizontal-alignment: TextHorizontalAlignment.center;
-                width: 100%;
-                color: #2c3e50;
+            Button {
+                text: "Easy";
+                clicked => {
+                    SettingState.difficulty = Difficulty.Easy;
+                }
             }
 
-            Text {
-                text: "现在选择：" + difficulty-to-string(SettingState.difficulty);
-                font-size: 18px;
-                horizontal-alignment: TextHorizontalAlignment.center;
-                width: 100%;
-                color: #34495e;
-                font-weight: 500;
+            Button {
+                text: "Medium";
+                clicked => {
+                    SettingState.difficulty = Difficulty.Medium;
+                }
             }
 
-            Text {
-                text: "（重新开始游戏后生效）";
-                font-size: 14px;
-                horizontal-alignment: TextHorizontalAlignment.center;
-                width: 100%;
-                color: #7f8c8d;
+            Button {
+                text: "Hard";
+                clicked => {
+                    SettingState.difficulty = Difficulty.Hard;
+                }
+            }
+
+            Button {
+                text: "Custom";
+                clicked => {
+                    SettingState.difficulty = Difficulty.Custom;
+                }
             }
         }
 
-        Rectangle {
-            height: 1px;
-            width: 100%;
-            background: #9baaa0ff;
+        Text {
+            text: "Custom 难度配置";
+            font-weight: 800;
+            font-size: 24px;
         }
-
+        //custom selection with grid size and mine count
         VerticalLayout {
-            spacing: 4px;
-            width: 100%;
-            
-            Text {
-                text: "\n请选择一个难度级别：";
-                font-size: 16px;
-                horizontal-alignment: TextHorizontalAlignment.left;
-                width: 100%;
-                color: #242323ff;
+            padding: 8px;
+            spacing: 8px;
+            ConfigItemInt {
+                text: "Width";
+                value <=> SettingState.custom-config-width;
+                min-value: 1;
+                max-value: 50;
             }
-            
-            HorizontalLayout {
-                spacing: 8px;
-                padding: 8px;
-                
-                Button {
-                    text: "Easy";
-                    checkable: true;
-                    checked: SettingState.difficulty == Difficulty.Easy;
-                    clicked => { SettingState.difficulty = Difficulty.Easy; }
-                }
 
-                Button {
-                    text: "Medium";
-                    checkable: true;
-                    checked: SettingState.difficulty == Difficulty.Medium;
-                    clicked => { SettingState.difficulty = Difficulty.Medium; }
-                }
-
-                Button {
-                    text: "Hard";
-                    checkable: true;
-                    checked: SettingState.difficulty == Difficulty.Hard;
-                    clicked => { SettingState.difficulty = Difficulty.Hard; }
-                }
-
-                Button {
-                    text: "Custom";
-                    checkable: true;
-                    checked: SettingState.difficulty == Difficulty.Custom;
-                    clicked => { SettingState.difficulty = Difficulty.Custom; }
-                }
+            ConfigItemInt {
+                text: "Height";
+                value <=> SettingState.custom-config-height;
+                min-value: 1;
+                max-value: 50;
             }
-        }
 
-        Rectangle {
-            width: 100%;
-            padding: 16px;
-            background: #f1f4f7ff;
-            
-            VerticalLayout {
-                spacing: 16px;
-                width: 100%;
-
-                Text {
-                    text: "Custom 难度配置";
-                    font-size: 24px;
-                    horizontal-alignment: TextHorizontalAlignment.left;
-                    width: 100%;
-                }
-
-                VerticalBox {
-                    spacing: 16px;
-                    padding: 8px;
-
-                    HorizontalLayout {
-                        spacing: 12px;
-                        alignment: LayoutAlignment.center;
-
-                        Text {
-                            width: 120px;
-                            text: "Width";
-                            font-size: 16px;
-                            horizontal-alignment: TextHorizontalAlignment.center;
-                            vertical-alignment: TextVerticalAlignment.center;
-                        }
-
-                        HorizontalLayout {
-                            spacing: 8px;
-                            
-                            // 减号按钮
-                            Button {
-                                text: "-";
-                                clicked => { SettingState.custom-config.width -= 1; }
-                            }
-                            
-                            Text {
-                                width: 60px;
-                                text: SettingState.custom-config.width;
-                                font-size: 20px;
-                                horizontal-alignment: TextHorizontalAlignment.center;
-                                vertical-alignment: TextVerticalAlignment.center;
-                            }
-                            
-                            // 加号按钮
-                            Button {
-                                text: "+";
-                                clicked => { SettingState.custom-config.width += 1; }
-                            }
-                        }
-                    }
-
-                    HorizontalLayout {
-                        spacing: 12px;
-                        alignment: LayoutAlignment.center;
-                        
-                        Text {
-                            width: 120px;
-                            text: "Height";
-                            font-size: 16px;
-                            horizontal-alignment: TextHorizontalAlignment.center;
-                            vertical-alignment: TextVerticalAlignment.center;
-                        }
-                        
-                        HorizontalLayout {
-                            spacing: 8px;
-                            
-                            // 减号按钮
-                            Button {
-                                text: "-";
-                                clicked => { SettingState.custom-config.height -= 1; }
-                            }
-                            
-                            Text {
-                                width: 60px;
-                                text: SettingState.custom-config.height;
-                                font-size: 20px;
-                                horizontal-alignment: TextHorizontalAlignment.center;
-                                vertical-alignment: TextVerticalAlignment.center;
-                            }
-                            
-                            // 加号按钮
-                            Button {
-                                text: "+";
-                                clicked => { SettingState.custom-config.height += 1; }
-                            }
-                        }
-                    }
-
-                    HorizontalLayout {
-                        spacing: 12px;
-                        alignment: LayoutAlignment.center;
-
-                        Text {
-                            width: 120px;
-                            text: "Mine Count";
-                            font-size: 16px;
-                            horizontal-alignment: TextHorizontalAlignment.center;
-                            vertical-alignment: TextVerticalAlignment.center;
-                        }
-                        
-                        HorizontalLayout {
-                            spacing: 8px;
-                            
-                            // 减号按钮
-                            Button {
-                                text: "-";
-                                clicked => { SettingState.custom-config.mine-count -= 1; }
-                            }
-                            
-                            Text {
-                                width: 60px;
-                                text: SettingState.custom-config.mine-count;
-                                font-size: 20px;
-                                horizontal-alignment: TextHorizontalAlignment.center;
-                                vertical-alignment: TextVerticalAlignment.center;
-                            }
-                            
-                            // 加号按钮
-                            Button {
-                                text: "+";
-                                clicked => { SettingState.custom-config.mine-count += 1; }
-                            }
-                        }
-                    }
-                }
-                
-                Text {
-                    text: "建议：宽度和高度范围为 9-24，地雷数量不超过总格子数的 20%";
-                    font-size: 12px;
-                    horizontal-alignment: TextHorizontalAlignment.center;
-                    width: 100%;
-                }
+            ConfigItemInt {
+                text: "Mine Count";
+                value <=> SettingState.custom-config-mine-count;
+                min-value: 1;
+                max-value: 50;
             }
         }
     }
