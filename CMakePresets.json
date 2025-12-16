@@ -7,7 +7,7 @@
             "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/.build",
             "installDir": "${sourceDir}/.install/${presetName}",
-            "toolchainFile": "D:\\vcpkg\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "true"
             }
@@ -42,26 +42,6 @@
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Windows"
-            }
-        },
-        {
-            "name": "msvc-x64-prefix",
-            "inherits": "msvc-x64",
-            "displayName": "Native - MSVC x64 (Cmake Prefix)",
-            "cacheVariables": {
-                "CMAKE_PREFIX_PATH": "D:/Slint-cpp_1.14.1/lib/cmake/Slint>"
-            }
-        },
-        {
-            "name": "Configure preset using toolchain file",
-            "displayName": "Configure preset using toolchain file",
-            "description": "Sets Ninja generator, build and install directory",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_TOOLCHAIN_FILE": "",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
             }
         }
     ],
