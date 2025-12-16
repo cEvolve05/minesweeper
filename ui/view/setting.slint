@@ -9,6 +9,24 @@ export enum Difficulty {
     Custom,
 }
 
+export global DifficultyToString {
+    public pure function do(difficulty: Difficulty) -> string {
+        if (difficulty == Difficulty.Easy) {
+            return "Easy";
+        }
+        if (difficulty == Difficulty.Medium) {
+            return "Medium";
+        }
+        if (difficulty == Difficulty.Hard) {
+            return "Hard";
+        }
+        if (difficulty == Difficulty.Custom) {
+            return "Custom";
+        }
+        return "Unknown";
+    }
+}
+
 export struct GameConfig {
     width: int,
     height: int,
@@ -103,21 +121,6 @@ component ConfigItemInt inherits HorizontalLayout {
 }
 
 export component Setting inherits View {
-    function difficulty-to-string(difficulty: Difficulty) -> string {
-        if (difficulty == Difficulty.Easy) {
-            return "Easy";
-        }
-        if (difficulty == Difficulty.Medium) {
-            return "Medium";
-        }
-        if (difficulty == Difficulty.Hard) {
-            return "Hard";
-        }
-        if (difficulty == Difficulty.Custom) {
-            return "Custom";
-        }
-        return "Unknown";
-    }
     VerticalLayout {
         padding: 8px;
         spacing: 8px;
@@ -136,7 +139,7 @@ export component Setting inherits View {
             }
 
             Text {
-                text: "现在选择：" + difficulty-to-string(SettingState.difficulty);
+                text: "现在选择：" + DifficultyToString.do(SettingState.difficulty);
                 font-size: 18px;
                 horizontal-alignment: TextHorizontalAlignment.center;
                 width: 100%;
@@ -278,21 +281,21 @@ export component Setting inherits View {
                     padding: 8px;
                     ConfigItemInt {
                         text: "Width";
-                        value: SettingState.custom-config-width;
+                        value <=> SettingState.custom-config-width;
                         min-value: 1;
                         max-value: 50;
                     }
 
                     ConfigItemInt {
                         text: "Height";
-                        value: SettingState.custom-config-height;
+                        value <=> SettingState.custom-config-height;
                         min-value: 1;
                         max-value: 50;
                     }
 
                     ConfigItemInt {
                         text: "Mine Count";
-                        value: SettingState.custom-config-mine-count;
+                        value <=> SettingState.custom-config-mine-count;
                         min-value: 1;
                         max-value: 500;
                     }

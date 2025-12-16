@@ -1,10 +1,11 @@
 import { Button } from "std-widgets.slint";
 import { View } from "@project/widget/view.slint";
+import { Difficulty } from "@project/view/setting.slint";
 
 export struct ScoreboardItem {
     name: string,
     time: int,
-    difficulty: string,
+    difficulty: Difficulty,
     width: int,
     height: int,
     mine_count: int,
@@ -12,20 +13,55 @@ export struct ScoreboardItem {
 
 export global ScoreboardState {
     in property <[ScoreboardItem]> easy-items: [
-        { name: "John Doe", time: 45, difficulty: "Easy", width: 0, height: 0, mine_count: 0 },
-        { name: "Newbie", time: 65, difficulty: "Easy", width: 0, height: 0, mine_count: 0 },
+        {
+            name: "John Doe",
+            time: 45,
+            difficulty: Difficulty.Easy,
+            width: 0,
+            height: 0,
+            mine_count: 0
+        },
+        { name: "Newbie", time: 65, difficulty: Difficulty.Easy, width: 0, height: 0, mine_count: 0 },
     ];
     in property <[ScoreboardItem]> medium-items: [
-        { name: "Sonia K.", time: 55, difficulty: "Medium", width: 0, height: 0, mine_count: 0 },
-        { name: "Alice", time: 70, difficulty: "Medium", width: 0, height: 0, mine_count: 0 },
+        {
+            name: "Sonia K.",
+            time: 55,
+            difficulty: Difficulty.Medium,
+            width: 0,
+            height: 0,
+            mine_count: 0
+        },
+        { name: "Alice", time: 70, difficulty: Difficulty.Medium, width: 0, height: 0, mine_count: 0 },
     ];
     in property <[ScoreboardItem]> hard-items: [
-        { name: "Bob B.", time: 150, difficulty: "Hard", width: 0, height: 0, mine_count: 0 },
-        { name: "Player 5", time: 181, difficulty: "Hard", width: 0, height: 0, mine_count: 0 },
+        { name: "Bob B.", time: 150, difficulty: Difficulty.Hard, width: 0, height: 0, mine_count: 0 },
+        {
+            name: "Player 5",
+            time: 181,
+            difficulty: Difficulty.Hard,
+            width: 0,
+            height: 0,
+            mine_count: 0
+        },
     ];
     in property <[ScoreboardItem]> custom-items: [
-        { name: "Pro_M", time: 60, difficulty: "Custom", width: 10, height: 10, mine_count: 20 },
-        { name: "GamerX", time: 80, difficulty: "Custom", width: 4, height: 5, mine_count: 6 },
+        {
+            name: "Pro_M",
+            time: 60,
+            difficulty: Difficulty.Custom,
+            width: 10,
+            height: 10,
+            mine_count: 20
+        },
+        {
+            name: "GamerX",
+            time: 80,
+            difficulty: Difficulty.Custom,
+            width: 4,
+            height: 5,
+            mine_count: 6
+        },
     ];
     in property <length> name-size: 140px;
     in property <length> time-size: 80px;
@@ -69,7 +105,7 @@ component ScoreboardEntry {
             }
             
             // 使用 if 而不是 if/else，避免解析歧义
-            if (item.difficulty == "Custom"): Text {
+            if (item.difficulty == Difficulty.Custom): Text {
                 text: customLabel(item);
                 width: ScoreboardState.custom-desc-size;
                 horizontal-alignment: TextHorizontalAlignment.right;
@@ -79,7 +115,7 @@ component ScoreboardEntry {
             }
             
             // 使用可见性控制代替 else，确保布局结构简单
-            if (item.difficulty != "Custom"): Rectangle {
+            if (item.difficulty != Difficulty.Custom): Rectangle {
                 width: ScoreboardState.custom-desc-size;
                 background: transparent;
             }

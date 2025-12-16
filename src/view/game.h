@@ -1,6 +1,7 @@
 #include "entry.h"
 #include "logic/singleton.hpp"
 #include "logic/state_accessor.hpp"
+#include "scoreboard.h"
 #include "setting.h"
 #include "spdlog/spdlog.h"
 #include <algorithm>
@@ -33,7 +34,7 @@ class GameView : StateAccessor<ui::GameState> {
     GameView(slint::ComponentHandle<UiEntry> uiEntry)
         : StateAccessor(uiEntry), timeCounter(new slint::Timer()),
           shardData(std::make_shared<slint::VectorModel<ui::GridData>>()) {
-        auto self = *this;
+        auto& self = *this;
         self->on_clicked([this](int x, int y) {
             spdlog::info("clicked {}, {}", x, y);
             open(x, y);
@@ -47,20 +48,24 @@ class GameView : StateAccessor<ui::GameState> {
             }
         });
         self->on_face_clicked([this, &uiEntry] { restart(); });
+        self->on_add_scoreboard_item([this, &uiEntry](ui::ScoreboardItem item) {
+            ScoreboardView scoreboardView(uiEntry);
+            scoreboardView.addScoreboardItem(item);
+        });
         self->set_grid_data(shardData);
         slint::invoke_from_event_loop([this] { restart(); });
     }
 
     void startTimeCounter() {
         timeCounter->start(slint::TimerMode::Repeated, std::chrono::milliseconds(1000), [this]() {
-            auto self = *this;
+            auto& self = *this;
             self->set_time_in_second(self->get_time_in_second() + 1);
         });
     }
 
     void stopTimeCounter(bool reset = true) {
         timeCounter->stop();
-        auto self = *this;
+        auto& self = *this;
         if (reset) {
             self->set_time_in_second(0);
         }
@@ -69,7 +74,7 @@ class GameView : StateAccessor<ui::GameState> {
     void restart() {
         SettingView setting(this->uiEntry);
         auto config = setting.getGameConfig();
-        auto self = *this;
+        auto& self = *this;
         stopTimeCounter();
         shardData->clear();
         gridMap.clear();
@@ -238,12 +243,12 @@ class GameView : StateAccessor<ui::GameState> {
             if (thisGridRef.isFlag) {
                 thisGridRef.isFlag = false;
                 setGridStatus(x, y, ui::GridStatus::Closed);
-                auto self = *this;
+                auto& self = *this;
                 self->set_flag_counter(self->get_flag_counter() + 1);
             } else {
                 thisGridRef.isFlag = true;
                 setGridStatus(x, y, ui::GridStatus::ClosedFlag);
-                auto self = *this;
+                auto& self = *this;
                 self->set_flag_counter(self->get_flag_counter() - 1);
             }
         }
@@ -260,8 +265,8 @@ class GameView : StateAccessor<ui::GameState> {
         }
         spdlog::info("Win!");
         gameRunning = false;
-        auto self = *this;
-        auto time = self->get_time_in_second();
+        auto& self = *this;
+        self->set_show_win(true);
         // show win
         stopTimeCounter(false);
     }
@@ -269,7 +274,7 @@ class GameView : StateAccessor<ui::GameState> {
     void gameover() {
         spdlog::info("Game Over!");
         gameRunning = false;
-        auto self = *this;
+        auto& self = *this;
         auto time = self->get_time_in_second();
         self->set_face_status(ui::FaceButtonStatus::Lose);
         // show game over

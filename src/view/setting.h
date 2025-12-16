@@ -9,7 +9,7 @@ class SettingView : StateAccessor<ui::SettingState> {
     SettingView(slint::ComponentHandle<UiEntry> uiEntry) : StateAccessor(uiEntry) {}
 
     ui::GameConfig getGameConfig() {
-        auto self = *this;
+        auto& self = *this;
         auto difficulty = self->get_difficulty();
         switch (difficulty) {
         case ui::Difficulty::Easy:

@@ -15,6 +15,7 @@ export { GridStatus } from "@project/widget/grid.slint";
 import { Scoreboard } from "@project/view/scoreboard.slint";
 export { ScoreboardState } from "@project/view/scoreboard.slint";
 import { Setting } from "@project/view/setting.slint";
+import { WinPopup, GameState } from "view/game.slint";
 export { SettingState, GameConfig, Difficulty } from "@project/view/setting.slint";
 
 component Debug {
@@ -95,11 +96,13 @@ export component Entry inherits Window {
             }
         }
 
-        if ViewManagerState.current-view == ViewName.Game:
+        if ViewManagerState.current-view == ViewName.Game && !GameState.show-win:
             Game { }
         if ViewManagerState.current-view == ViewName.Scoreboard:
             Scoreboard { }
         if ViewManagerState.current-view == ViewName.Setting:
             Setting { }
+        if GameState.show-win: 
+            WinPopup { }
     }
 }

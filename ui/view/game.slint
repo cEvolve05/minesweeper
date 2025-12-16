@@ -1,4 +1,4 @@
-import { VerticalBox, Button } from "std-widgets.slint";
+import { VerticalBox, Button, TextEdit } from "std-widgets.slint";
 import { Isolator } from "@project/widget/isolator.slint";
 import { View } from "@project/widget/view.slint";
 import {
@@ -7,6 +7,9 @@ import {
     GridStatus,
     FaceButtonStatus,
 } from "../widget/board.slint";
+import { DifficultyToString, SettingState, Difficulty } from "setting.slint";
+import { ScoreboardItem } from "scoreboard.slint";
+import { Empty } from "../widget/empty.slint";
 
 export global GameState {
     in-out property <int> number;
@@ -23,6 +26,67 @@ export global GameState {
     in property <int> time-in-second;
     in property <FaceButtonStatus> face-status;
     callback face_clicked();
+    callback add-scoreboard-item(data: ScoreboardItem);
+    in-out property <bool> show-win;
+}
+
+export component WinPopup {
+    VerticalLayout {
+        padding: 16px;
+        alignment: LayoutAlignment.space-evenly;
+        spacing: 12px;
+        Text {
+            text: "🎉 Congratulations";
+            font-weight: 800;
+            font-size: 30px;
+            horizontal-alignment: TextHorizontalAlignment.center;
+            vertical-alignment: TextVerticalAlignment.center;
+        }
+
+        Text {
+            text: getDiffStat() + "\nTime: " + GameState.time-in-second + " seconds";
+            font-size: 20px;
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.start;
+            Text {
+                text: "Name: ";
+                font-size: 20px;
+            }
+
+            _name := TextInput {
+                width: 100px;
+                height: 32px;
+                font-size: 20px;
+                enabled: true;
+                text: "Player";
+                read-only: false;
+            }
+        }
+
+        Button {
+            text: "Commit to Scoreboard";
+            clicked => {
+                GameState.add-scoreboard-item( {
+                    name: _name.text,
+                    time: GameState.time-in-second,
+                    width: GameState.grid-width,
+                    height: GameState.grid-height,
+                    mine_count: GameState.flag-counter,
+                    difficulty: SettingState.difficulty,
+                });
+                GameState.show-win = false;
+            }
+        }
+    }
+
+    function getDiffStat() -> string {
+        if (SettingState.difficulty == Difficulty.Custom) {
+            return "Difficulty: Custom " + GameState.grid-width + "x" + GameState.grid-height + ", " + GameState.flag-counter + " mines";
+        }
+        return "Difficulty: " + DifficultyToString.do(SettingState.difficulty);
+    }
 }
 
 export component Game inherits Board {
@@ -46,4 +110,5 @@ export component Game inherits Board {
         GameState.pressed-changed(x, y, value)
     }
     face_clicked => GameState.face_clicked();
+    @children
 }
